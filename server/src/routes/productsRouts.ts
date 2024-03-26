@@ -1,18 +1,20 @@
 import { Router } from "express";
 import controlers from "../controlers";
+import { Product } from "../module";
+import { ProductAttributes } from "../module/Product";
 
 const router = Router();
 
-// router.post("/add_meeting", async (req, res) => {
-//   try {
-//     const newMeeting: MeetingRow = { ...req.body };
-//     const result = await db.meetinges.insertMeeting(newMeeting);
-//     console.log(result);
-//     res.json(result);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
+router.post("/create_product", async (req, res) => {
+  try {
+    const newProduct: ProductAttributes = { ...req.body };
+    const result = await controlers.product.createProduct(newProduct);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 // router.put("/update_meeting/:id", async (req, res) => {
 //   try {
@@ -41,7 +43,7 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const products = await controlers.product.getAllProducts();
+    const products = await controlers.product.getAllProducts() as Product[];
     console.log("products: ", products);
     res.json(products);
   } catch (error) {

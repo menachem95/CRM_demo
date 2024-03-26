@@ -6,16 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const controlers_1 = __importDefault(require("../controlers"));
 const router = (0, express_1.Router)();
-// router.post("/add_meeting", async (req, res) => {
-//   try {
-//     const newMeeting: MeetingRow = { ...req.body };
-//     const result = await db.meetinges.insertMeeting(newMeeting);
-//     console.log(result);
-//     res.json(result);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
+router.post("/create_product", async (req, res) => {
+    try {
+        const newProduct = { ...req.body };
+        const result = await controlers_1.default.product.createProduct(newProduct);
+        console.log(result);
+        res.json(result);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+});
 // router.put("/update_meeting/:id", async (req, res) => {
 //   try {
 //     const id = req.params.id;

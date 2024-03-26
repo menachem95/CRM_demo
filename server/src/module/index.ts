@@ -21,8 +21,8 @@ UserRelationship.belongsTo(User, { foreignKey: 'customer_id', as: 'customer' });
 
 
 //עגלה ומוצרים למשתמש
-Cart.hasMany(CartItem, { foreignKey: 'cartId' });
-CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
+Cart.hasMany(CartItem, { foreignKey: 'cart_Id' });
+CartItem.belongsTo(Cart, { foreignKey: 'cart_Item_id' });
 
 Product.hasMany(CartItem, { foreignKey: 'productId' });
 CartItem.belongsTo(Product, { foreignKey: 'productId' });

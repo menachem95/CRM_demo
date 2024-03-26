@@ -2,22 +2,22 @@ import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../config/config";
 
 export interface CartItemAttributes {
-  cart_id: number;
-  customer_id: number;
+  cart_Item_id: number;
+  // customer_id: number;
   product_id: number;
   createdAt?: Date; // הוספת שדה תאריך יצירה
   updatedAt?: Date; // הוספת שדה תאריך עדכון
 }
 
 interface CartCreationAttributes
-  extends Optional<CartItemAttributes, "cart_id"> {}
+  extends Optional<CartItemAttributes, "cart_Item_id"> {}
 
 class CartItem
   extends Model<CartItemAttributes, CartCreationAttributes>
   implements CartItemAttributes
 {
-  public cart_id!: number;
-  public customer_id!: number;
+  public cart_Item_id!: number;
+  // public customer_id!: number;
   public product_id!: number;
   public createdAt!: Date; // הוספת שדה תאריך יצירה
   public updatedAt!: Date; // הוספת שדה תאריך עדכון
@@ -26,19 +26,19 @@ class CartItem
 
 CartItem.init(
   {
-    cart_id: {
+    cart_Item_id: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
-    customer_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-      references: {
-        model: "users",
-        key: "user_id",
-      },
-    },
+    // customer_id: {
+    //   type: DataTypes.INTEGER.UNSIGNED,
+    //   allowNull: false,
+    //   references: {
+    //     model: "users",
+    //     key: "user_id",
+    //   },
+    // },
     product_id: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,

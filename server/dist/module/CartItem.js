@@ -8,19 +8,19 @@ const config_1 = __importDefault(require("../config/config"));
 class CartItem extends sequelize_1.Model {
 }
 CartItem.init({
-    cart_id: {
+    cart_Item_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
     },
-    customer_id: {
-        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-            model: "users",
-            key: "user_id",
-        },
-    },
+    // customer_id: {
+    //   type: DataTypes.INTEGER.UNSIGNED,
+    //   allowNull: false,
+    //   references: {
+    //     model: "users",
+    //     key: "user_id",
+    //   },
+    // },
     product_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         allowNull: false,

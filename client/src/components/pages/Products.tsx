@@ -19,6 +19,7 @@ import { Close } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
+import { User } from "../../store/userSlice";
 
 interface Product {
   id: string;
@@ -50,15 +51,17 @@ const API_URI = process.env.REACT_APP_API_SERVER as string;
 
 const ProductsPage: FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const {user_name, user_id} = useSelector((state: RootState) => state.user.userInfo)
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors },
-  // } = useForm<Partial<User>>();
-  // const dispatch = useDispatch()
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { user_name, user_id } = useSelector(
+    (state: RootState) => state.user.userInfo
+  );
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Partial<Product>>();
+  const dispatch = useDispatch();
 
   const fetchProducts = async () => {
     try {
@@ -81,19 +84,19 @@ const ProductsPage: FC = () => {
     fetchProducts();
   }, []);
 
-  // const handleDrawerOpen = () => {
-  //   setIsOpen(true);
-  // };
+  const handleDrawerOpen = () => {
+    setIsOpen(true);
+  };
 
-  // const handleDrawerClose = () => {
-  //   setIsOpen(false);
-  // };
+  const handleDrawerClose = () => {
+    setIsOpen(false);
+  };
 
   const val = {
     rows: products,
     columns: columns,
     title: "Products",
-    // buttonTitle: "Add customer",
+    buttonTitle: "Add Product",
   };
 
   // const addUser = async (data: Partial<User>) => {
@@ -122,18 +125,18 @@ const ProductsPage: FC = () => {
   //     handleDrawerClose();
   //     reset();
   //     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "User added successfully"}));
-  //     fetchUsers();
+  //     // fetchUsers();
   //   } catch (error) {
   //     console.error("Failed to add user:", error);
   //    dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to add user"}));
   //   }
   // };
   // פונקציה שתפעל בשליחת הטופס
-  // const onSubmit = async (data: Partial<User>) => {
-  //   console.log("data", data);
+  const onSubmit = async (data: Partial<Product>) => {
+    console.log("data", data);
 
-  //   addUser({ ...data, user_role: "CUSTOMER" });
-  // };
+    // addUser({ ...data, user_role: "CUSTOMER" });
+  };
 
   return (
     <>
@@ -149,7 +152,7 @@ const ProductsPage: FC = () => {
           <Typography variant="h4" component="h1">
             {val.title}
           </Typography>
-          {/* <Button
+          <Button
             onClick={handleDrawerOpen}
             // onKeyDown={toggleDrawer(false)}
             variant="contained"
@@ -157,7 +160,7 @@ const ProductsPage: FC = () => {
             // onClick={onClickHandler}
           >
             {val.buttonTitle}
-          </Button> */}
+          </Button>
           {/* <Button onClick={toggleDrawer(true)}>פתח טופס</Button> */}
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
@@ -165,7 +168,7 @@ const ProductsPage: FC = () => {
         <Table rows={val.rows} columns={val.columns} />
         {/* </TableContainer> */}
       </Box>
-      {/* <Drawer
+      <Drawer
         anchor="right"
         open={isOpen}
         hideBackdrop={true}
@@ -190,74 +193,74 @@ const ProductsPage: FC = () => {
             <Close />
           </IconButton>
           <Typography variant="h5" gutterBottom>
-            הוסף משתמש חדש
+            הוסף מוצר חדש{" "}
           </Typography>
           <Controller
-            name="user_name"
+            name="product_name"
             control={control}
             defaultValue=""
-            rules={{ required: "שדה זה הוא שדה חובה" }}
+            // rules={{ required: "שדה זה הוא שדה חובה" }}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="שם מלא"
+                label="שם המוצר"
                 variant="filled"
                 fullWidth
                 margin="normal"
-                error={!!errors.user_name}
-                helperText={errors.user_name ? errors.user_name.message : ""}
+                error={!!errors.product_name}
+                helperText={
+                  errors.product_name ? errors.product_name.message : ""
+                }
               />
             )}
           />
           <Controller
-            name="user_phone"
+            name="product_description"
             control={control}
             defaultValue=""
             rules={{
               required: "שדה זה הוא שדה חובה",
-
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="filled"
+                label="תאור המוצר"
+                error={!!errors.product_description}
+                helperText={
+                  errors.product_description
+                    ? errors.product_description.message
+                    : ""
+                }
+              />
+            )}
+          />
+          <Controller
+            name="product_price"
+            control={control}
+            defaultValue=""
+            
+            rules={{
+              required: "שדה זה הוא שדה חובה",
               pattern: {
-                value: /^[0-9]{10}$/,
-                message: "מספר הטלפון צריך להכיל ספרות בלבד",
+                value: /^\d+(\.\d+)?$/,
+                message: "מספרים בלבד",
               },
             }}
             render={({ field }) => (
               <TextField
                 {...field}
                 variant="filled"
-                label="פלאפון"
-                error={!!errors.user_phone}
-                helperText={errors.user_phone ? errors.user_phone.message : ""}
+                // type="number"
+                label="מחיר"
+              
+                error={!!errors.product_price}
+                helperText={
+                  errors.product_price ? errors.product_price.message : ""
+                }
               />
             )}
           />
-          <Controller
-            name="user_email"
-            control={control}
-            defaultValue=""
-            rules={{
-              required: "שדה זה הוא שדה חובה",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "כתובת האימייל אינה תקינה",
-              },
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                variant="filled"
-                label="דואר אלקטרוני"
-                error={!!errors.user_email}
-                helperText={errors.user_email ? errors.user_email.message : ""}
-              />
-            )}
-          />
-        <Controller
-        name="add_relations"
-        control={control}
-        
-        render={({ field }) =><FormControlLabel control={<Checkbox {...field}/>} label="שייך לקוח ישירות אלי" /> }
-      />
 
           <Button
             type="submit"
@@ -265,10 +268,10 @@ const ProductsPage: FC = () => {
             color="primary"
             sx={{ mt: 2 }}
           >
-            הוסף משתמש
+            הוסף מוצר
           </Button>
         </Box>
-      </Drawer> */}
+      </Drawer>
     </>
   );
 };
