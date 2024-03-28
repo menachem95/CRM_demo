@@ -8,6 +8,7 @@ export interface ProductAttributes {
   product_description: string;
 }
 
+
 interface ProductCreationAttributes
   extends Optional<ProductAttributes, "product_id"> {}
 

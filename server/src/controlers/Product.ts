@@ -14,6 +14,7 @@ export const getAllProducts = async () => {
   }
 };
 
+
 export const createProduct = async (product: ProductAttributes) => {
   try {
    const newProduct = await Product.create(product)

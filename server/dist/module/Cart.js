@@ -30,16 +30,19 @@ Cart.init({
     //   defaultValue: DataTypes.NOW,
     //   onUpdate: DataTypes.NOW,
     // },
-    createdAt: {
-        type: sequelize_1.DataTypes.DATE, // סוג הנתונים הוא תאריך
-        allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
-    },
-    updatedAt: {
-        type: sequelize_1.DataTypes.DATE, // סוג הנתונים הוא תאריך
-        allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
-    },
+    // createdAt: {
+    //   type: DataTypes.DATE, // סוג הנתונים הוא תאריך
+    //   allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
+    //   defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE, // סוג הנתונים הוא תאריך
+    //   allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
+    //   defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    // },
 }, {
     tableName: "carts",
+    timestamps: false,
     sequelize: config_1.default, // העברת ה-instance של Sequelize
 });
 exports.default = Cart;

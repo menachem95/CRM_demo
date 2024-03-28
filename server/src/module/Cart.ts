@@ -4,8 +4,8 @@ import sequelize from "../config/config";
  interface CartAttributes {
   cart_id: number;
   customer_id: number;
-  createdAt?: Date; // הוספת שדה תאריך יצירה
-  updatedAt?: Date; // הוספת שדה תאריך עדכון
+  // createdAt?: Date; // הוספת שדה תאריך יצירה
+  // updatedAt?: Date; // הוספת שדה תאריך עדכון
 }
 
 interface CartCreationAttributes extends Optional<CartAttributes, "cart_id"> {}
@@ -16,8 +16,8 @@ class Cart
 {
   public cart_id!: number;
   public customer_id!: number;
-  public createdAt!: Date; // הוספת שדה תאריך יצירה
-  public updatedAt!: Date; // הוספת שדה תאריך עדכון
+  // public createdAt!: Date; // הוספת שדה תאריך יצירה
+  // public updatedAt!: Date; // הוספת שדה תאריך עדכון
   // ניתן להוסיף כאן מתודות מופע ומחלקה
 }
 
@@ -45,17 +45,22 @@ Cart.init(
     //   defaultValue: DataTypes.NOW,
     //   onUpdate: DataTypes.NOW,
     // },
-    createdAt: {
-      type: DataTypes.DATE, // סוג הנתונים הוא תאריך
-      allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
-    },
-    updatedAt: {
-      type: DataTypes.DATE, // סוג הנתונים הוא תאריך
-      allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
-    },
+    // createdAt: {
+    //   type: DataTypes.DATE, // סוג הנתונים הוא תאריך
+    //   allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
+    //   defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE, // סוג הנתונים הוא תאריך
+    //   allowNull: false, // מומלץ להוסיף כדי לוודא שהעמודה לא תהיה null
+    //   defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+
+    // },
   },
   {
     tableName: "carts",
+    timestamps: false,
     sequelize, // העברת ה-instance של Sequelize
   }
 );

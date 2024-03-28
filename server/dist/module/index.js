@@ -25,11 +25,12 @@ UserRelationship_1.default.belongsTo(User_1.default, { foreignKey: 'agent_id', a
 // לקוחות והסוכנים שלהם
 User_1.default.hasMany(UserRelationship_1.default, { foreignKey: 'customer_id', as: 'agents' });
 UserRelationship_1.default.belongsTo(User_1.default, { foreignKey: 'customer_id', as: 'customer' });
-//עגלה ומוצרים למשתמש
-Cart_1.default.hasMany(CartItem_1.default, { foreignKey: 'cart_Id' });
-CartItem_1.default.belongsTo(Cart_1.default, { foreignKey: 'cart_Item_id' });
-Product_1.default.hasMany(CartItem_1.default, { foreignKey: 'productId' });
-CartItem_1.default.belongsTo(Product_1.default, { foreignKey: 'productId' });
+// קשר One-to-Many בין Cart ל-CartItem
+Cart_1.default.hasMany(CartItem_1.default, { foreignKey: 'cart_id' });
+CartItem_1.default.belongsTo(Cart_1.default, { foreignKey: 'cart_id' });
+// קשר One-to-Many בין Product ל-CartItem
+Product_1.default.hasMany(CartItem_1.default, { foreignKey: 'product_id' });
+CartItem_1.default.belongsTo(Product_1.default, { foreignKey: 'product_id' });
 Deal_1.default.belongsTo(Cart_1.default, { foreignKey: 'cart_id' });
 Cart_1.default.hasOne(Deal_1.default, { foreignKey: 'cart_id' });
 User_1.default.hasMany(Deal_1.default, { foreignKey: 'customer_id' });

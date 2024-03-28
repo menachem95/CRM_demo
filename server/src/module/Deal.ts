@@ -25,29 +25,29 @@ class Deal
 Deal.init(
   {
     deal_id: {
-      type: new DataTypes.DECIMAL(),
-      allowNull: false,
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
     },
     cart_id: {
       type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
       primaryKey: true, references: {
         model: "carts",
         key: "cart_id",
       },
     },
     customer_id: {
-      type: new DataTypes.STRING(20),
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      unique: true,
       references: {
         model: "users",
         key: "user_id",
       },
     },
     agent_id: {
-      type: new DataTypes.STRING(128),
-      allowNull: false, references: {
+
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true, references: {
         model: "users",
         key: "user_id",
       },
@@ -55,6 +55,7 @@ Deal.init(
   },
   {
     tableName: "deals",
+    timestamps: false,
     sequelize, // העברת ה-instance של Sequelize
   }
 );

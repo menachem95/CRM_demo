@@ -9,35 +9,35 @@ class Deal extends sequelize_1.Model {
 }
 Deal.init({
     deal_id: {
-        type: new sequelize_1.DataTypes.DECIMAL(),
-        allowNull: false,
+        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
     },
     cart_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
         primaryKey: true, references: {
             model: "carts",
             key: "cart_id",
         },
     },
     customer_id: {
-        type: new sequelize_1.DataTypes.STRING(20),
+        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        unique: true,
         references: {
             model: "users",
             key: "user_id",
         },
     },
     agent_id: {
-        type: new sequelize_1.DataTypes.STRING(128),
-        allowNull: false, references: {
+        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+        allowNull: true, references: {
             model: "users",
             key: "user_id",
         },
     },
 }, {
     tableName: "deals",
+    timestamps: false,
     sequelize: config_1.default, // העברת ה-instance של Sequelize
 });
 exports.default = Deal;

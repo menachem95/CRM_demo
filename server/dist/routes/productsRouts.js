@@ -19,16 +19,25 @@ router.post("/create_product", async (req, res) => {
 });
 router.post("/add_product_to_cart", async (req, res) => {
     try {
-        const product_id = { ...req.body.product_id };
-        const customer_id = { ...req.body.customer_id };
-        let cart_id = { ...req.body.cart_id };
+        const product_id = req.body.product_id;
+        const customer_id = req.body.customer_id;
+        let cart_id = req.body.cart_id;
+        console.log("***************************");
+        console.log("product_id: ", product_id);
+        console.log("customer_id: ", +customer_id);
+        console.log("cart_id: ", cart_id);
         //אם אין עגלה אז צריך ליצור עגלה חדשה וזה אומר ליצור גם דיל חדש וזה אומר גם להשיג את ה איידי של הלקוח
         // let cart_Item_id = req.query.cart_Item_id;
         if (!cart_id) {
-            const cart = (await controlers_1.default.cart.createCart(customer_id));
-            cart_id = cart.cart_id;
+            const cart = await controlers_1.default.cart.createCart(+customer_id);
+            console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
+            cart_id = cart.dataValues.cart_id;
         }
-        const result = await controlers_1.default.product.addProductToCart({ product_id, cart_id });
+        console.log("cart_id: ", cart_id);
+        const result = await controlers_1.default.product.addProductToCart({
+            product_id,
+            cart_id,
+        });
         console.log(result);
         res.json(result);
     }
