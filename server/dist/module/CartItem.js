@@ -13,14 +13,14 @@ CartItem.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    // customer_id: {
-    //   type: DataTypes.INTEGER.UNSIGNED,
-    //   allowNull: false,
-    //   references: {
-    //     model: "users",
-    //     key: "user_id",
-    //   },
-    // },
+    cart_id: {
+        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+            model: "carts",
+            key: "cart_id",
+        },
+    },
     product_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         allowNull: false,

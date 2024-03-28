@@ -17,6 +17,25 @@ router.post("/create_product", async (req, res) => {
         res.status(500).json(error);
     }
 });
+router.post("/add_product_to_cart", async (req, res) => {
+    try {
+        const product_id = { ...req.body.product_id };
+        const customer_id = { ...req.body.customer_id };
+        let cart_id = { ...req.body.cart_id };
+        //אם אין עגלה אז צריך ליצור עגלה חדשה וזה אומר ליצור גם דיל חדש וזה אומר גם להשיג את ה איידי של הלקוח
+        // let cart_Item_id = req.query.cart_Item_id;
+        if (!cart_id) {
+            const cart = (await controlers_1.default.cart.createCart(customer_id));
+            cart_id = cart.cart_id;
+        }
+        const result = await controlers_1.default.product.addProductToCart({ product_id, cart_id });
+        console.log(result);
+        res.json(result);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+});
 // router.put("/update_meeting/:id", async (req, res) => {
 //   try {
 //     const id = req.params.id;
@@ -42,7 +61,7 @@ router.post("/create_product", async (req, res) => {
 // });
 router.get("/", async (req, res) => {
     try {
-        const products = await controlers_1.default.product.getAllProducts();
+        const products = (await controlers_1.default.product.getAllProducts());
         console.log("products: ", products);
         res.json(products);
     }

@@ -99,43 +99,35 @@ const ProductsPage: FC = () => {
     buttonTitle: "Add Product",
   };
 
-  // const addUser = async (data: Partial<User>) => {
-  //   const {add_relations} = data
-  //   console.log("data: ", data);
-  //   delete data.add_relations
-  //   console.log("data: ", data);
-
-  //   console.log("add_relations: ", add_relations)
-  //   console.log(`${API_URI}users/add_user${add_relations ? `?${user_id}` : ""}`);
-
-  //   try {
-  //     const response = await fetch(`${API_URI}users/add_user${add_relations ? `?add_relations=${user_id}` : ""}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-  //     console.log(response1);
-  //     console.log("User added successfully");
-  //     handleDrawerClose();
-  //     reset();
-  //     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "User added successfully"}));
-  //     // fetchUsers();
-  //   } catch (error) {
-  //     console.error("Failed to add user:", error);
-  //    dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to add user"}));
-  //   }
-  // };
+  const createProduct = async (data: Partial<Product>) => {
+    try {
+      const response = await fetch(`${API_URI}products/create_product`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+      console.log(response1);
+      console.log("Product created successfully");
+      handleDrawerClose();
+      reset();
+      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Product created successfully"}));
+      fetchProducts();
+    } catch (error) {
+      console.error("Failed to add user:", error);
+     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to create product"}));
+    }
+  };
   // פונקציה שתפעל בשליחת הטופס
   const onSubmit = async (data: Partial<Product>) => {
     console.log("data", data);
 
-    // addUser({ ...data, user_role: "CUSTOMER" });
+     createProduct(data);
   };
 
   return (

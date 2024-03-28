@@ -2,8 +2,8 @@ import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../config/config";
 
 export interface CartItemAttributes {
-  cart_Item_id: number;
-  // customer_id: number;
+  cart_Item_id?: number;
+  cart_id: number;
   product_id: number;
   createdAt?: Date; // הוספת שדה תאריך יצירה
   updatedAt?: Date; // הוספת שדה תאריך עדכון
@@ -17,7 +17,7 @@ class CartItem
   implements CartItemAttributes
 {
   public cart_Item_id!: number;
-  // public customer_id!: number;
+  public cart_id!: number;
   public product_id!: number;
   public createdAt!: Date; // הוספת שדה תאריך יצירה
   public updatedAt!: Date; // הוספת שדה תאריך עדכון
@@ -31,14 +31,14 @@ CartItem.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // customer_id: {
-    //   type: DataTypes.INTEGER.UNSIGNED,
-    //   allowNull: false,
-    //   references: {
-    //     model: "users",
-    //     key: "user_id",
-    //   },
-    // },
+    cart_id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+      references: {
+        model: "carts",
+        key: "cart_id",
+      },
+    },
     product_id: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,

@@ -2,6 +2,7 @@ import { CartItem, Product } from "../module";
 import { ProductAttributes } from "../module/Product";
 import { CartItemAttributes } from "../module/CartItem";
 
+
 export const getAllProducts = async () => {
   try {
     const products = await Product.findAll();

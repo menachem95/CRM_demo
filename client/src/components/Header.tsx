@@ -7,6 +7,7 @@ import { Outlet } from 'react-router-dom';
 import { UseSelector, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { resetUserInfo } from '../store/userSlice';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 // import { ReactComponent as MyLogo } from '../img/43162.svg';
 // import logo from "../img/logo.png"
 
@@ -71,6 +72,9 @@ const Header = () => {
           ))}</Box>
           
           <Box sx={{display: "flex"}}>
+          <IconButton>
+            <ShoppingCartIcon />
+          </IconButton>
           <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
            {user_name}
         {/* <img src={logo} width={"40%"} /> */}
