@@ -29,9 +29,14 @@ router.post("/add_product_to_cart", async (req, res) => {
         //אם אין עגלה אז צריך ליצור עגלה חדשה וזה אומר ליצור גם דיל חדש וזה אומר גם להשיג את ה איידי של הלקוח
         // let cart_Item_id = req.query.cart_Item_id;
         if (!cart_id) {
-            const cart = await controlers_1.default.cart.createCart(+customer_id);
-            console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
-            cart_id = cart.dataValues.cart_id;
+            try {
+                const cart = (await controlers_1.default.cart.createCart(+customer_id));
+                console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
+                cart_id = cart.dataValues.cart_id;
+            }
+            catch (error) {
+                console.error("Error creating cart and deal:", error);
+            }
         }
         console.log("cart_id: ", cart_id);
         const result = await controlers_1.default.product.addProductToCart({

@@ -30,12 +30,15 @@ router.post("/add_product_to_cart", async (req, res) => {
 
     // let cart_Item_id = req.query.cart_Item_id;
     if (!cart_id) {
-      const cart = await controlers.cart.createCart(+customer_id) as Cart;
-      console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
-      cart_id = cart.dataValues.cart_id;
+      try {
+        const cart = (await controlers.cart.createCart(+customer_id)) as Cart;
+        console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
+        cart_id = cart.dataValues.cart_id;
+      } catch (error) {
+        console.error("Error creating cart and deal:", error);
+      }
     }
     console.log("cart_id: ", cart_id);
-
     const result = await controlers.product.addProductToCart({
       product_id,
       cart_id,

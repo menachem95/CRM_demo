@@ -19,21 +19,15 @@ const getAllCarts = async () => {
 };
 exports.getAllCarts = getAllCarts;
 const createCart = async (customer_id) => {
-    try {
-        const result = await config_1.default.transaction(async (t) => {
-            const cart = await module_1.Cart.create({ customer_id }, { transaction: t });
-            console.log(cart);
-            const cart_id = cart.dataValues.cart_id;
-            console.log("//////////////////////////////////////////////////////////*");
-            console.log("cart_id: ", cart_id);
-            await module_1.Deal.create({ cart_id, customer_id });
-            return cart;
-        });
-        return result;
-    }
-    catch (error) {
-        console.error("error: ", error);
-        return error;
-    }
+    const result = await config_1.default.transaction(async (t) => {
+        const cart = await module_1.Cart.create({ customer_id }, { transaction: t });
+        console.log(cart);
+        const cart_id = cart.dataValues.cart_id;
+        console.log("//////////////////////////////////////////////////////////*");
+        console.log("cart_id: ", cart_id);
+        const deal = await module_1.Deal.create({ cart_id, customer_id }, { transaction: t });
+        return cart;
+    });
+    return result;
 };
 exports.createCart = createCart;

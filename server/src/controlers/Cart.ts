@@ -14,19 +14,15 @@ export const getAllCarts = async () => {
 };
 
 export const createCart = async (customer_id: number) => {
-  try {
+ 
     const result = await sequelize.transaction(async (t) => {
       const cart = await Cart.create({ customer_id }, { transaction: t });
       console.log(cart);
       const cart_id  = cart.dataValues.cart_id;
       console.log("//////////////////////////////////////////////////////////*")
       console.log("cart_id: ",cart_id)
-      await Deal.create({ cart_id, customer_id });
+      const deal = await Deal.create({ cart_id, customer_id }, { transaction: t });
       return cart;
     });
     return result;
-  } catch (error) {
-    console.error("error: ", error);
-    return error;
-  }
 };
