@@ -28,7 +28,8 @@ router.post("/add_product_to_cart", async (req, res) => {
         console.log("cart_id: ", cart_id);
         //אם אין עגלה אז צריך ליצור עגלה חדשה וזה אומר ליצור גם דיל חדש וזה אומר גם להשיג את ה איידי של הלקוח
         // let cart_Item_id = req.query.cart_Item_id;
-        if (!cart_id) {
+        if (cart_id === undefined) {
+            console.log(88888888888888888888888888888888888888888888888888888888888888888888888888888888888);
             try {
                 const cart = (await controlers_1.default.cart.createCart(+customer_id));
                 console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);

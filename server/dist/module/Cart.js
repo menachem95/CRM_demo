@@ -5,7 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const config_1 = __importDefault(require("../config/config"));
+const CartItem_1 = __importDefault(require("./CartItem"));
+const Product_1 = __importDefault(require("./Product"));
 class Cart extends sequelize_1.Model {
+    static async getItemsForCart(cartId) {
+        const items = await CartItem_1.default.findAll({
+            where: {
+                cart_id: cartId
+            },
+            include: [{
+                    model: Product_1.default, // ודא שמודל Product מיובא ומוגדר כראוי
+                    // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
+                }]
+        });
+        return items;
+    }
 }
 Cart.init({
     cart_id: {

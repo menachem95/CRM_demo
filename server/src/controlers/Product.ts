@@ -1,4 +1,4 @@
-import { CartItem, Product } from "../module";
+import { Cart, CartItem, Product } from "../module";
 import { ProductAttributes } from "../module/Product";
 import { CartItemAttributes } from "../module/CartItem";
 
@@ -25,10 +25,15 @@ export const createProduct = async (product: ProductAttributes) => {
   }
 };
 
+
 export const addProductToCart = async (cartItem: CartItemAttributes) => {
   try {
-   const newCartItem = await CartItem.create(cartItem)
-   return newCartItem;
+    const cart_id = cartItem.cart_id
+   await CartItem.create(cartItem)
+   let items = await Cart.getItemsForCart(cart_id); 
+   
+   console.log("items: ", items);
+     return {cart_id, items};
   } catch (error) {
     console.error("error: ", error);
     return error;

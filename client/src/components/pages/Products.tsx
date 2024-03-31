@@ -19,22 +19,11 @@ import { Close } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
-import { User } from "../../store/userSlice";
+import { User, createCart } from "../../store/userSlice";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Product, CartItemtoServer, CartItemsFromTheServer } from "../../typs/products_and_carts";
 
-interface Product {
-  id: string;
-  product_id: string;
-  product_name: string;
-  product_price: number | string;
-  product_description: string;
-}
 
-interface CartItem {
-  product_id: string;
-  customer_id: string;
-  cart_id?: string;
-}
 
 // const rows = fetchUsers()
 
@@ -43,9 +32,8 @@ const API_URI = process.env.REACT_APP_API_SERVER as string;
 const ProductsPage: FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { user_name, user_id } = useSelector(
-    (state: RootState) => state.user.userInfo
-  );
+  const { userInfo, cart } = useSelector((state: RootState) => state.user);
+
   const {
     control,
     handleSubmit,
@@ -120,14 +108,19 @@ const ProductsPage: FC = () => {
       );
     }
   };
-  const addProductToCart = async (data: CartItem) => {
+  const addProductToCart = async (data: CartItemtoServer) => {
+    let cartData = data;
+    console.log("cart.cart_id: ", cart.cart_id);
+    if (cart.cart_id) {
+      cartData = { cart_id: cart.cart_id, ...cartData };
+    }
     try {
       const response = await fetch(`${API_URI}products/add_product_to_cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(cartData),
       });
       if (!response.ok) {
         dispatch(
@@ -139,8 +132,8 @@ const ProductsPage: FC = () => {
         );
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-      console.log(response1);
+      const response1 = await response.json() as CartItemsFromTheServer ; // קביעת טיפוס עבור התגובה שהתקבלה
+      console.log("response1", response1);
       console.log("Product added to cart successfully");
       handleDrawerClose();
       reset();
@@ -151,6 +144,7 @@ const ProductsPage: FC = () => {
           snackbarMessage: "Product added to cart successfully",
         })
       );
+      dispatch(createCart(response1));
       // fetchProducts();
     } catch (error) {
       console.error("Failed to add user:", error);
@@ -193,7 +187,7 @@ const ProductsPage: FC = () => {
             onClick={() => {
               console.log("params", params);
               const product_id = params.id as string;
-              const customer_id = user_id || "1";
+              const customer_id = userInfo.user_id || "1";
 
               addProductToCart({ product_id, customer_id });
             }}

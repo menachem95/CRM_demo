@@ -72,7 +72,7 @@ const Header = () => {
           ))}</Box>
           
           <Box sx={{display: "flex"}}>
-          <IconButton>
+          <IconButton >
             <ShoppingCartIcon />
           </IconButton>
           <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>

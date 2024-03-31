@@ -27,8 +27,11 @@ const createProduct = async (product) => {
 exports.createProduct = createProduct;
 const addProductToCart = async (cartItem) => {
     try {
-        const newCartItem = await module_1.CartItem.create(cartItem);
-        return newCartItem;
+        const cart_id = cartItem.cart_id;
+        await module_1.CartItem.create(cartItem);
+        let items = await module_1.Cart.getItemsForCart(cart_id);
+        console.log("items: ", items);
+        return { cart_id, items };
     }
     catch (error) {
         console.error("error: ", error);

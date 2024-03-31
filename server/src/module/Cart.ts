@@ -1,5 +1,7 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../config/config";
+import CartItem from "./CartItem";
+import Product from "./Product";
 
  interface CartAttributes {
   cart_id: number;
@@ -16,9 +18,23 @@ class Cart
 {
   public cart_id!: number;
   public customer_id!: number;
+  
+  static async getItemsForCart(cartId: number) {
+    const items = await CartItem.findAll({
+      where: {
+        cart_id: cartId
+      },
+      include: [{
+        model: Product, // ודא שמודל Product מיובא ומוגדר כראוי
+        // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
+      }]
+    });
+    return items
+  }
   // public createdAt!: Date; // הוספת שדה תאריך יצירה
   // public updatedAt!: Date; // הוספת שדה תאריך עדכון
   // ניתן להוסיף כאן מתודות מופע ומחלקה
+  
 }
 
 Cart.init(
@@ -64,6 +80,8 @@ Cart.init(
     sequelize, // העברת ה-instance של Sequelize
   }
 );
+
+
 
 export default Cart;
 
