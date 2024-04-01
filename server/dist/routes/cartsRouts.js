@@ -50,4 +50,14 @@ router.get("/", async (req, res) => {
         res.status(500).json({ error, message: "error" });
     }
 });
+router.delete("/:cart_id", async (req, res) => {
+    try {
+        const cart_id = req.params.cart_id;
+        await controlers_1.default.cart.removeCart(+cart_id);
+        res.json(`${cart_id} removed`);
+    }
+    catch (error) {
+        res.status(500).json({ error, message: "error" });
+    }
+});
 exports.default = router;

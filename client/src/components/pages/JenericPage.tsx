@@ -82,7 +82,7 @@ const JenericPage: FC<JenericPageProps> = ({rows, columns, title, buttonTitle, o
       </Box>
       {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
       {/* }} > */}
-      <Table rows={rows} columns={columns} />
+      <Table rows={rows} columns={columns} cellType="" />
       {/* </TableContainer> */}
     </Box>
     <DrawerForm CloseDrawer={() => toggleDrawer(false)} isOpen={isOpen} onClickHandler={onClickHandler}/>

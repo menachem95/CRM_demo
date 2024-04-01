@@ -169,7 +169,7 @@ const MeetingSPage: FC = () => {
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
-        <Table rows={val.rows} columns={val.columns} />
+        <Table rows={val.rows} columns={val.columns} cellType=""/>
         {/* </TableContainer> */}
       </Box>
       <Drawer

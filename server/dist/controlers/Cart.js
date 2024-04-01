@@ -32,5 +32,18 @@ const createCart = async (customer_id) => {
 };
 exports.createCart = createCart;
 const removeCart = async (cart_id) => {
+    const result = await config_1.default.transaction(async (t) => {
+        // await Cart.destroy({ where: { cart_id }});
+        await module_1.Deal.destroy({ where: { cart_id } });
+        await module_1.Cart.destroy({
+            where: {
+                cart_id,
+            },
+            transaction: t, // שילוב הטרנזקציה באובייקט האופציות
+        });
+        await module_1.Deal.destroy({ where: { cart_id }, transaction: t });
+        await module_1.CartItem.destroy({ where: { cart_id }, transaction: t });
+    });
+    return result;
 };
 exports.removeCart = removeCart;

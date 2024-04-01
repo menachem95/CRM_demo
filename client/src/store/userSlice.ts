@@ -15,6 +15,11 @@ export interface User {
   user_id: string;
 }
 
+const initialCart = {
+  cart_id: "",
+  cartItems: [],
+};
+
 const userInfo: User = {
   user_name: "",
   user_id: "",
@@ -41,10 +46,7 @@ const cartFromStorage = localStorage.getItem("cart")
 const initialState = {
   userInfo,
   // cart: cartFromStorage || cart,
-  cart: cartFromStorage || {
-    cart_id: "",
-    cartItems: [],
-  },
+  cart: cartFromStorage || initialCart,
   isLoading: false,
   error: null,
 };
@@ -66,10 +68,7 @@ export const userSlice = createSlice({
     resetUserInfo: (state) => {
       state.userInfo = userInfo;
     },
-    createCart: (
-      state,
-      action: PayloadAction<CartItemsFromTheServer>
-    ) => {
+    createCart: (state, action: PayloadAction<CartItemsFromTheServer>) => {
       const cartItems: CartItem[] = action.payload.items
         .map((item) => item.Product)
         .filter((product) => product !== undefined) as CartItem[];
@@ -87,16 +86,16 @@ export const userSlice = createSlice({
       console.log("state.cart: ", state.cart);
       // state.isLoading = false;
     },
-    // updateCart: (state, action: PayloadAction<CartItem>) => {
-    //   console.log("action.payload: ", action.payload);
-    //   localStorage.setItem("cart", JSON.stringify({...state.cart, ...action.payload}));
-    //   state.cart.cartItems.push(action.payload);
-    //   console.log(state.userInfo);
-    //   // state.isLoading = false;
-    // },
+    removeCart: (state) => {
+      localStorage.removeItem("cart");
+      state.cart = initialCart;
+
+      // state.isLoading = false;
+    },
   },
 });
 
-export const { setUserInfo, resetUserInfo, createCart } = userSlice.actions;
+export const { setUserInfo, resetUserInfo, createCart, removeCart } =
+  userSlice.actions;
 
 export default userSlice.reducer;

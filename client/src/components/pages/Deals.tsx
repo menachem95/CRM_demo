@@ -94,8 +94,8 @@ const ProductsPage: FC = () => {
   const val = {
     rows: products,
     columns: columns,
-    title: "Products",
-    buttonTitle: "Add Product",
+    title: "Deals",
+   
   };
 
   return (
@@ -112,20 +112,12 @@ const ProductsPage: FC = () => {
           <Typography variant="h4" component="h1">
             {val.title}
           </Typography>
-          <Button
-            // onClick={handleDrawerOpen}
-            // onKeyDown={toggleDrawer(false)}
-            variant="contained"
-            color="primary"
-            // onClick={onClickHandler}
-          >
-            {val.buttonTitle}
-          </Button>
+          
           {/* <Button onClick={toggleDrawer(true)}>פתח טופס</Button> */}
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
-        <Table rows={val.rows} columns={val.columns} />
+        <Table rows={val.rows} columns={val.columns} cellType="deal_id" />
         {/* </TableContainer> */}
       </Box>
       

@@ -61,9 +61,10 @@ import { Popover } from '@mui/material';
 
   interface Props {
     rows: {}[],
-    columns: GridColDef[]
+    columns: GridColDef[],
+    cellType: string
   }
- const Table: FC<Props> = ({rows, columns}) => {
+ const Table: FC<Props> = ({rows, columns, cellType}) => {
   // const [open, setOpen] = React.useState(false);
   // const [selectedRow, setSelectedRow] = React.useState<any>();
 
@@ -79,9 +80,9 @@ import { Popover } from '@mui/material';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
 
-  const handleCellClick = (params: GridCellParams, event: React.MouseEvent<HTMLElement>) => {
+  const handleCellClick = (params: GridCellParams, event: React.MouseEvent<HTMLElement>, cellType: string) => {
     console.log("params: ", params);
-    if(params.field !== "user_name") return;
+    if(params.field !== cellType) return;
     setSelectedRow(params.row);
     setAnchorEl(event.currentTarget);
   };
@@ -107,7 +108,7 @@ import { Popover } from '@mui/material';
           pageSizeOptions={[5, 10]}
           // rowSelection={false}
           // onRowClick={handleRowClick}
-          onCellClick={handleCellClick}
+          onCellClick={(p,e) => handleCellClick(p,e,cellType)}
           // checkboxSelection
           
         />
@@ -135,8 +136,9 @@ import { Popover } from '@mui/material';
       >
         <Paper>
            <Typography component="div" sx={{ p: 2 }}>
+            <Button>{cellType}</Button>
           {/* Render the details here using selectedRow data */}
-          {selectedRow && <div>Details about {selectedRow.user_id}</div>}
+          {selectedRow && <div>Details about {selectedRow[cellType]}</div>}
         </Typography>
         <Typography>
         {/* {selectedRow.user_name} */}

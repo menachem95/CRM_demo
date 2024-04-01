@@ -41,10 +41,20 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    console.log("carts")
+    console.log("carts");
     const carts = await controlers.cart.getAllCarts();
     console.log("carts: ", carts);
     res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error, message: "error" });
+  }
+});
+
+router.delete("/:cart_id", async (req, res) => {
+  try {
+    const cart_id = req.params.cart_id;
+    await controlers.cart.removeCart(+cart_id);
+    res.json(`${cart_id} removed`);
   } catch (error) {
     res.status(500).json({ error, message: "error" });
   }

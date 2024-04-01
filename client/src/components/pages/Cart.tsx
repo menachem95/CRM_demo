@@ -1,5 +1,10 @@
 import React, { useEffect, useState, FC } from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridDeleteIcon,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import {
   Box,
   Typography,
@@ -9,6 +14,11 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import { TableContainer } from "@mui/material";
 import { Button } from "@mui/material";
@@ -19,7 +29,7 @@ import { Close } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
-import { User, createCart } from "../../store/userSlice";
+import { User, createCart, removeCart } from "../../store/userSlice";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {
   Product,
@@ -27,15 +37,58 @@ import {
   CartItemsFromTheServer,
 } from "../../typs/products_and_carts";
 
-
 // const rows = fetchUsers()
 
 const API_URI = process.env.REACT_APP_API_SERVER as string;
 
 const Cart: FC = () => {
-  const { userInfo, cart } = useSelector((state: RootState) => state.user);
-   console.log("cart: ", cart);
+  const { cart } = useSelector((state: RootState) => state.user);
+  const [open, setOpen] = React.useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  console.log("cart: ", cart);
+
+  const deleteCart = async () => {
+    try {
+      const response = await fetch(`${API_URI}carts/${cart.cart_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+      dispatch(removeCart());
+      dispatch(
+        setSnackbar({
+          snackbarOpen: true,
+          snackbarType: "success",
+          snackbarMessage: "Cart removed successfully",
+        })
+      );
+      // fetchUsers();
+    } catch (error) {
+      console.error("Failed to remove cart:", error);
+      dispatch(
+        setSnackbar({
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: "Failed to remove cart",
+        })
+      );
+    } finally {
+      handleClose();
+    }
+  };
   const dispatch = useDispatch();
   if (!cart.cart_id) {
     return <div>cart is ampty</div>;
@@ -86,102 +139,56 @@ const Cart: FC = () => {
             {val.title}
           </Typography>
 
-          <Button >קניה</Button>
+          <Button variant="contained" color="primary">
+            קניה
+          </Button>
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
-        <Table rows={val.rows} columns={val.columns} />
+        <Table rows={val.rows} columns={val.columns} cellType="" />
         {/* </TableContainer> */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+
+            alignItems: "right",
+            marginBottom: 2,
+          }}
+        >
+          <IconButton onClick={handleClickOpen}>
+            <GridDeleteIcon />
+          </IconButton>
+        </Box>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          ?האם אתה בטוח שברצונך למחוק את העגלה
+        </DialogTitle>
+        {/* <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            ?האם אתה בטוח שברצונך למחוק את העגלה
+          </DialogContentText>
+        </DialogContent> */}
+        <DialogActions>
+          <Button
+            onClick={handleClose}
+            //  autoFocus
+          >
+            ביטול{" "}
+          </Button>
+          <Button onClick={deleteCart} variant="contained" color="primary">
+            מחק עגלה
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
 export default Cart;
-
-// const rows = [
-//     { id: 1, lastName: "Snow", firstName: "Jon", agent: "moshe", age: 35 },
-//     { id: 2, lastName: "Lannister", firstName: "Cersei", agent: "ido", age: 42 },
-//     { id: 3, lastName: "Lannister", firstName: "Jaime", agent: "moshe", age: 45 },
-//     { id: 4, lastName: "Stark", firstName: "Arya", agent: "menachem", age: 16 },
-//     {
-//       id: 5,
-//       lastName: "Targaryen",
-//       firstName: "Daenerys",
-//       agent: "moshe",
-//       age: null,
-//     },
-//     { id: 6, lastName: "Melisandre", firstName: null, agent: "moshe", age: 150 },
-//     {
-//       id: 7,
-//       lastName: "Clifford",
-//       firstName: "Ferrara",
-//       agent: "menachem",
-//       age: 44,
-//     },
-//     { id: 8, lastName: "Frances", firstName: "Rossini", agent: "moshe", age: 36 },
-//     { id: 9, lastName: "Roxie", firstName: "Harvey", agent: "moshe", age: 65 },
-//     { id: 10, lastName: "Stark", firstName: "Arya", agent: "natan", age: 16 },
-//     {
-//       id: 11,
-//       lastName: "Targaryen",
-//       firstName: "Daenerys",
-//       agent: "moshe",
-//       age: null,
-//     },
-//     { id: 12, lastName: "Melisandre", firstName: null, agent: "moshe", age: 150 },
-//     { id: 13, lastName: "Clifford", firstName: "Ferrara", agent: "ido", age: 44 },
-//     {
-//       id: 14,
-//       lastName: "Frances",
-//       firstName: "Rossini",
-//       agent: "moshe",
-//       age: 36,
-//     },
-//     { id: 15, lastName: "Stark", firstName: "Arya", agent: "moshe", age: 16 },
-//     {
-//       id: 16,
-//       lastName: "Targaryen",
-//       firstName: "Daenerys",
-//       agent: "moshe",
-//       age: null,
-//     },
-//     {
-//       id: 17,
-//       lastName: "Melisandre",
-//       firstName: null,
-//       agent: "menachem",
-//       age: 150,
-//     },
-//     {
-//       id: 18,
-//       lastName: "Clifford",
-//       firstName: "Ferrara",
-//       agent: "moshe",
-//       age: 44,
-//     },
-//     { id: 19, lastName: "Frances", firstName: "Rossini", agent: "levi", age: 36 },
-//     { id: 20, lastName: "Stark", firstName: "Arya", agent: "moshe", age: 16 },
-//     {
-//       id: 21,
-//       lastName: "Targaryen",
-//       firstName: "Daenerys",
-//       agent: "moshe",
-//       age: null,
-//     },
-//     { id: 22, lastName: "Melisandre", firstName: null, agent: "moshe", age: 150 },
-//     {
-//       id: 23,
-//       lastName: "Clifford",
-//       firstName: "Ferrara",
-//       agent: "moshe",
-//       age: 44,
-//     },
-//     {
-//       id: 24,
-//       lastName: "Frances",
-//       firstName: "Rossini",
-//       agent: "moshe",
-//       age: 36,
-//     },
-//   ];
