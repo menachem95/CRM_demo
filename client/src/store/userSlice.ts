@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Cart, CartItem, CartItemsFromTheServer, Product } from "../typs/products_and_carts";
+import {
+  Cart,
+  CartItem,
+  CartItemsFromTheServer,
+  Product,
+} from "../typs/products_and_carts";
 
 type UserRole = "AGENT" | "CUSTOMER";
 
@@ -10,30 +15,36 @@ export interface User {
   user_id: string;
 }
 
-
-
 const userInfo: User = {
   user_name: "",
   user_id: "",
   user_role: "CUSTOMER",
 };
 
-const cart: Cart = {
-  cart_id: "",
-  cartItems: 
-   [
-    {
-      product_id: "",
-      product_price: "",
-      product_description: "",
-      product_name: "",
-    },
-  ],
-};
+const cartFromStorage = localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart")!)
+  : null;
+
+// const cart: Cart = {
+//   cart_id: "",
+//   cartItems:
+//    [
+//     {
+//       product_id: "",
+//       product_price: "",
+//       product_description: "",
+//       product_name: "",
+//     },
+//   ],
+// };
 
 const initialState = {
   userInfo,
-  cart,
+  // cart: cartFromStorage || cart,
+  cart: cartFromStorage || {
+    cart_id: "",
+    cartItems: [],
+  },
   isLoading: false,
   error: null,
 };
@@ -58,20 +69,10 @@ export const userSlice = createSlice({
     createCart: (
       state,
       action: PayloadAction<CartItemsFromTheServer>
-      // <Cart>
     ) => {
-      console.log("action.payload: ", action.payload);
-      console.log(` JSON.stringify({
-        cart_id: cart.cart_id,
-        cartItems: [action.payload.items],
-      })`,  JSON.stringify({
-        cart_id: cart.cart_id,
-        cartItems: [action.payload.items],
-      }))
-      console.log( "cart_id",action.payload.cart_id)
-      // const cartItems: CartItem[]  = action.payload.items.map(item => item.Product)
-      const cartItems: CartItem[] = action.payload.items.map(item => item.Product).filter(product => product !== undefined) as CartItem[];
-      console.log( "cartItems",cartItems)
+      const cartItems: CartItem[] = action.payload.items
+        .map((item) => item.Product)
+        .filter((product) => product !== undefined) as CartItem[];
       localStorage.setItem(
         "cart",
         JSON.stringify({

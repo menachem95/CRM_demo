@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { resetUserInfo } from "../store/userSlice";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Console } from "console";
 // import { ReactComponent as MyLogo } from '../img/43162.svg';
 // import logo from "../img/logo.png"
 
@@ -25,6 +26,7 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selected, setSelected] = useState<string>("/");
   const { cartItems } = useSelector((state: RootState) => state.user.cart);
+  console.log("cartItems",cartItems)
   const location = useLocation();
   const navigate = useNavigate();
   const { user_name } = useSelector((state: RootState) => state.user.userInfo);
