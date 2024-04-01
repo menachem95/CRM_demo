@@ -96,6 +96,7 @@ import { Popover } from '@mui/material';
     return (
       <div style={{ width: '100%' }}>
         <DataGrid
+       
           rows={rows}
           columns={columns}
           initialState={{

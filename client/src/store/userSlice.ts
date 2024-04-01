@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Cart, CartItemsFromTheServer } from "../typs/products_and_carts";
+import { Cart, CartItem, CartItemsFromTheServer, Product } from "../typs/products_and_carts";
 
 type UserRole = "AGENT" | "CUSTOMER";
 
@@ -20,7 +20,8 @@ const userInfo: User = {
 
 const cart: Cart = {
   cart_id: "",
-  cartItems: [
+  cartItems: 
+   [
     {
       product_id: "",
       product_price: "",
@@ -60,15 +61,29 @@ export const userSlice = createSlice({
       // <Cart>
     ) => {
       console.log("action.payload: ", action.payload);
+      console.log(` JSON.stringify({
+        cart_id: cart.cart_id,
+        cartItems: [action.payload.items],
+      })`,  JSON.stringify({
+        cart_id: cart.cart_id,
+        cartItems: [action.payload.items],
+      }))
+      console.log( "cart_id",action.payload.cart_id)
+      // const cartItems: CartItem[]  = action.payload.items.map(item => item.Product)
+      const cartItems: CartItem[] = action.payload.items.map(item => item.Product).filter(product => product !== undefined) as CartItem[];
+      console.log( "cartItems",cartItems)
       localStorage.setItem(
         "cart",
         JSON.stringify({
-          cart_id: cart.cart_id,
-          cartItems: [action.payload.items],
+          cart_id: action.payload.cart_id,
+          cartItems,
         })
       );
-      state.cart = { ...state.cart, ...action.payload};
-      console.log(state.cart);
+      state.cart = {
+        cart_id: action.payload.cart_id,
+        cartItems,
+      };
+      console.log("state.cart: ", state.cart);
       // state.isLoading = false;
     },
     // updateCart: (state, action: PayloadAction<CartItem>) => {

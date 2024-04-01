@@ -51,7 +51,7 @@ const Header = () => {
         </Typography>
         {/* <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}> */}
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
-          {['Home', 'Customers', 'Tasks', 'Products', 'Deals', 'Meetings'].map((text) => (
+          {['Home', 'Customers', 'Tasks', 'Products', 'Deals', 'Meetings', "Cart"].map((text) => (
             <Button 
               key={text}
               color="inherit" 
@@ -72,7 +72,7 @@ const Header = () => {
           ))}</Box>
           
           <Box sx={{display: "flex"}}>
-          <IconButton >
+          <IconButton  >
             <ShoppingCartIcon />
           </IconButton>
           <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>

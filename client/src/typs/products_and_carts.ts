@@ -11,6 +11,7 @@ export interface Product {
     product_id: string;
     customer_id: string;
     cart_id?: string;
+    Product?: CartItem
   }
   
   export interface CartItemsFromTheServer {
@@ -19,6 +20,7 @@ export interface Product {
   }
 
   export interface CartItem {
+    id?: string;
     cart_id?: string;
     product_id: string;
     product_name: string;
