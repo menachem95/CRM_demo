@@ -5,7 +5,7 @@ import { Router } from "express";
 import productsRouter from "./productsRouts";
 import cartsRouter from "./cartsRouts"
 import usersRouter from "./usersRouts"
-// import dealsRouter from "./deals";
+ import dealsRouter from "./dealsRouts";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ const router = Router();
 router.use("/products", productsRouter);
 router.use("/carts", cartsRouter);
 router.use("/users", usersRouter);
-// router.use("/deals", dealsRouter);
+router.use("/deals", dealsRouter);
 
 
 

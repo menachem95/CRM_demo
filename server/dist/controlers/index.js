@@ -26,4 +26,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const product = __importStar(require("./Product"));
 const cart = __importStar(require("./Cart"));
 const user = __importStar(require("./User"));
-exports.default = { product, cart, user };
+const deal = __importStar(require("./Deal"));
+exports.default = { product, cart, user, deal };

@@ -14,7 +14,6 @@ export const getAllCarts = async () => {
 };
 
 export const createCart = async (customer_id: number) => {
- 
     const result = await sequelize.transaction(async (t) => {
       const cart = await Cart.create({ customer_id }, { transaction: t });
       console.log(cart);
@@ -26,3 +25,7 @@ export const createCart = async (customer_id: number) => {
     });
     return result;
 };
+
+export const removeCart = async (cart_id: number) => {
+  
+}

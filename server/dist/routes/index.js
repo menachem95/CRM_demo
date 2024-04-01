@@ -10,7 +10,7 @@ const express_1 = require("express");
 const productsRouts_1 = __importDefault(require("./productsRouts"));
 const cartsRouts_1 = __importDefault(require("./cartsRouts"));
 const usersRouts_1 = __importDefault(require("./usersRouts"));
-// import dealsRouter from "./deals";
+const dealsRouts_1 = __importDefault(require("./dealsRouts"));
 const router = (0, express_1.Router)();
 // router.use("/login", loginRouter )
 // router.use("/users", usersRouter);
@@ -18,5 +18,5 @@ const router = (0, express_1.Router)();
 router.use("/products", productsRouts_1.default);
 router.use("/carts", cartsRouts_1.default);
 router.use("/users", usersRouts_1.default);
-// router.use("/deals", dealsRouter);
+router.use("/deals", dealsRouts_1.default);
 exports.default = router;

@@ -168,15 +168,7 @@ const ProductsPage: FC = () => {
     { field: "product_name", headerName: "Name", width: 150 },
     { field: "product_price", headerName: "Price", width: 150 },
     { field: "product_description", headerName: "description", width: 250 },
-    {
-      field: "user_role",
-      headerName: "Role",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 150,
-      // valueGetter: (params: GridValueGetterParams) =>
-      //   `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-    },
+   
     {
       field: "add_to_cart",
       headerName: "Add to Cart",

@@ -21,54 +21,81 @@ import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
 import { User, createCart } from "../../store/userSlice";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import {
-  Product,
-  CartItemtoServer,
-  CartItemsFromTheServer,
-} from "../../typs/products_and_carts";
+import { Product, CartItemtoServer, CartItemsFromTheServer, Deal } from "../../typs/products_and_carts";
+
 
 
 // const rows = fetchUsers()
 
 const API_URI = process.env.REACT_APP_API_SERVER as string;
 
-const Cart: FC = () => {
+const ProductsPage: FC = () => {
+  const [products, setProducts] = useState<Deal[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { userInfo, cart } = useSelector((state: RootState) => state.user);
-   console.log("cart: ", cart);
 
+ 
   const dispatch = useDispatch();
-  if (!cart.cart_id) {
-    return <div>cart is ampty</div>;
-  }
-  let rows = [...cart.cartItems];
 
-  rows = rows.map((row) => {
-    return {
-      ...row,
-      id: Math.random().toString(),
-      product_price: `${row.product_price} ₪`,
-    };
-    // row.id = row.product_id;
-    // row.product_price = `${row.product_price} ₪`
-  });
+  const fetchDeals = async () => {
+    try {
+      const response = await fetch(`${API_URI}deals`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data: Deal[] = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+      for (let i = 0; i < data.length; i++) {
+        data[i].id = data[i].deal_id;
+        // data[i].product_price = `${data[i].product_price} ₪`;
+        // data[i].add_to_cart =
+      }
 
-  console.log("rows: ", rows);
-  // for (let i = 0; i < rows.length; i++) {
-  //   rows[i].id = rows[i].product_id;
-  //   rows[i].product_price = `${rows[i].product_price} ₪`;
-  //   // data[i].add_to_cart =
-  // }
+      setProducts(data);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  };
+  useEffect(() => {
+    fetchDeals();
+  }, []);
+
+
+
+  
 
   const columns: GridColDef[] = [
-    { field: "product_name", headerName: "Name", width: 150 },
-    { field: "product_price", headerName: "Price", width: 150 },
-    { field: "product_description", headerName: "description", width: 250 },
+    { field: "deal_id", headerName: "deal_id", width: 150 },
+    { field: "cart_id", headerName: "cart_id", width: 150 },
+    { field: "customer_id", headerName: "costumer_id", width: 150 },
+    { field: "agent_id", headerName: "agent_id", width: 150 },
+   
+    // {
+    //   field: "add_to_cart",
+    //   headerName: "Add to Cart",
+    //   width: 70,
+    //   renderCell: (params) => {
+    //     return (
+    //       <IconButton
+    //         onClick={() => {
+    //           console.log("params", params);
+    //           const product_id = params.id as string;
+    //           const customer_id = userInfo.user_id || "1";
+
+    //           // addProductToCart({ product_id, customer_id });
+    //         }}
+    //       >
+    //         <AddShoppingCartIcon />
+    //       </IconButton>
+    //     ); //<-- Mui icons should be put this way here.
+    //   },
+    // },
   ];
 
   const val = {
-    rows,
+    rows: products,
     columns: columns,
-    title: "Cart",
+    title: "Products",
+    buttonTitle: "Add Product",
   };
 
   return (
@@ -85,19 +112,28 @@ const Cart: FC = () => {
           <Typography variant="h4" component="h1">
             {val.title}
           </Typography>
-
-          <Button >קניה</Button>
+          <Button
+            // onClick={handleDrawerOpen}
+            // onKeyDown={toggleDrawer(false)}
+            variant="contained"
+            color="primary"
+            // onClick={onClickHandler}
+          >
+            {val.buttonTitle}
+          </Button>
+          {/* <Button onClick={toggleDrawer(true)}>פתח טופס</Button> */}
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
         <Table rows={val.rows} columns={val.columns} />
         {/* </TableContainer> */}
       </Box>
+      
     </>
   );
 };
 
-export default Cart;
+export default ProductsPage;
 
 // const rows = [
 //     { id: 1, lastName: "Snow", firstName: "Jon", agent: "moshe", age: 35 },
