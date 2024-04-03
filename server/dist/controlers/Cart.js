@@ -25,7 +25,7 @@ const createCart = async (customer_id) => {
         const cart_id = cart.dataValues.cart_id;
         console.log("//////////////////////////////////////////////////////////*");
         console.log("cart_id: ", cart_id);
-        const deal = await module_1.Deal.create({ cart_id, customer_id }, { transaction: t });
+        const deal = await module_1.Deal.create({ cart_id, customer_id, inProgress: true }, { transaction: t });
         return cart;
     });
     return result;

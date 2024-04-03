@@ -29,7 +29,7 @@ const addProductToCart = async (cartItem) => {
     try {
         const cart_id = cartItem.cart_id;
         await module_1.CartItem.create(cartItem);
-        let items = await module_1.Cart.getItemsForCart(cart_id);
+        const items = await module_1.Cart.getItemsForCart(cart_id);
         console.log("items: ", items);
         return { cart_id, items };
     }

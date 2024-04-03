@@ -13,6 +13,9 @@ export interface User {
   user_name: string;
   user_role: UserRole;
   user_id: string;
+  user_phone?: string;
+  user_email?: string;
+  user_address?: string;
 }
 
 const initialCart = {

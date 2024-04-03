@@ -1,5 +1,8 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../config/config";
+import Deal from "./Deal";
+import Cart from "./Cart";
+import CartItem from "./CartItem";
 
 export interface UserAttributes {
   user_id: number;
@@ -20,6 +23,27 @@ class User
   public user_name!: string;
   public user_email!: string;
   public user_password!: string;
+
+  static async getCurrentCartInProgres(customer_id: number) {
+    try {
+      const deal = await Deal.findOne({
+        where: { inProgress: true, customer_id },
+        // include: [
+        //   {
+        //     model: Cart, // ודא שמודל Product מיובא ומוגדר כראוי
+        //     // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
+        //   },
+
+        // ],
+      });
+      const cart_id = deal!.cart_id;
+      const items = await Cart.getItemsForCart(+cart_id);
+      console.log("items: ", items);
+      return { cart_id, items };
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
 
   // ניתן להוסיף כאן מתודות מופע ומחלקה
 }
@@ -47,14 +71,12 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-   
   },
   {
     tableName: "users",
     sequelize, // העברת ה-instance של Sequelize
   }
 );
-
 
 export default User;
 

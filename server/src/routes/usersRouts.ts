@@ -1,6 +1,6 @@
 import { Router } from "express";
 import controlers from "../controlers";
-import { UserAttributes } from "../module/User";
+import User, { UserAttributes } from "../module/User";
 import bcrypt from "bcrypt";
 import { UserRelationshipAttributes } from "../module/UserRelationship";
 
@@ -43,23 +43,23 @@ router.post("/create_user", async (req, res) => {
 //   }
 // });
 
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     // const user_role = req.params.user_role as UserRole;
-//     const meetings = await db.meetinges.getAllYourMeetingsByUserId(
-//       id,
-//       // user_role
-//     );
-//     res.json(meetings);
-//   } catch (error) {
-//     res.status(500).json({ error, message: "error" });
-//   }
-// });
+
+router.get("/get_current_cart/:customer_id", async (req, res) => {
+  try {
+    const customer_id = req.params.customer_id;
+    console.log("customer_id: ", customer_id)
+    const cartItems = await User.getCurrentCartInProgres(+customer_id);
+   console.log("cartItems", cartItems)
+    res.json(cartItems);
+  } catch (error) {
+    res.status(500).json({ error, message: "error" });
+  }
+});
+
 
 router.get("/get_all_user_info/:user_id", async (req, res) => {
   try {
-    const user_id = req.params.user_id
+    const user_id = req.params.user_id;
     const users = await controlers.user.getUser(user_id);
     console.log("users: ", users);
     res.json(users);
@@ -67,6 +67,7 @@ router.get("/get_all_user_info/:user_id", async (req, res) => {
     res.status(500).json({ error, message: "error" });
   }
 });
+
 
 router.get("/", async (req, res) => {
   try {

@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 
 import EmailIcon from "@mui/icons-material/Email";
@@ -23,7 +23,11 @@ import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { User } from "../../store/userSlice";
 import { createCart } from "../../functions/createCart";
-import { CartItemsFromTheServer } from "../../typs/products_and_carts";
+import {
+  CartItem,
+  CartItemsFromTheServer,
+} from "../../typs/products_and_carts";
+import { getUserCurrentCart } from "../../functions/userInfo";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -36,52 +40,104 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const UserPropile: FC = () => {
   const dispatch = useDispatch();
+  const [user, setUser] = useState<User>();
+  const [cart, setCart] = useState<CartItemsFromTheServer>();
   let { user_id } = useParams();
 
-  const handleSuccess = (user: User) => {
-    console.log(user);
+  useEffect(() => {
+    const handleSuccess = (user: User) => {
+      console.log(user);
+      setUser(user);
+      // dispatch(
+      //   setSnackbar({
+      //     snackbarOpen: true,
+      //     snackbarType: "success",
+      //     snackbarMessage: `${user.user_name} imported successfully `,
+      //   })
+      // );
+    };
 
-    dispatch(
-      setSnackbar({
-        snackbarOpen: true,
-        snackbarType: "success",
-        snackbarMessage: `${user.user_name} imported successfully `,
-      })
+    const handleError = () => {
+      dispatch(
+        setSnackbar({
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: "Failed to add user",
+        })
+      );
+    };
+
+    getUserInfo<undefined, any>(
+      {
+        url: `users/get_all_user_info/${user_id}`,
+        method: "GET",
+      },
+      handleSuccess,
+      handleError
     );
-  };
 
-  const handleError = () => {
-    dispatch(
-      setSnackbar({
-        snackbarOpen: true,
-        snackbarType: "error",
-        snackbarMessage: "Failed to add user",
-      })
-    );
-  };
-
-  getUserInfo<undefined, any>(
-    {
-      url: `users/get_all_user_info/${user_id}`,
-      method: "GET",
-    },
-    handleSuccess,
-    handleError
-  );
-
-  const onCreateCartHandel = async()  => {
-  await  createCart(
+    getUserCurrentCart(
       user_id as string,
-      (cart) => {
+      (CartItem) => {
+        console.log("cartItems: ", CartItem);
+        debugger
+        setCart(CartItem);
         
-        console.log("cart: ", cart);
         dispatch(
           setSnackbar({
             snackbarOpen: true,
             snackbarType: "success",
-            snackbarMessage: `${cart} imported successfully `,
+            snackbarMessage: `${CartItem} imported successfully `,
           })
         );
+      },
+      (errer) => {
+        dispatch(
+          setSnackbar({
+            snackbarOpen: true,
+            snackbarType: "error",
+            snackbarMessage: ` error ${errer} `,
+          })
+        );
+      }
+    );
+  }, []);
+
+  const onCreateCartHandel = async () => {
+    await createCart(
+      user_id as string,
+      (cart) => {
+        console.log("cart: ", cart);
+        // getUserCurrentCart(
+        //   user_id as string,
+        //   (CartItem) => {
+        //     console.log("cartItems: ", CartItem);
+        //     setCart(CartItem);
+        //     dispatch(
+        //       setSnackbar({
+        //         snackbarOpen: true,
+        //         snackbarType: "success",
+        //         snackbarMessage: `${CartItem} imported successfully `,
+        //       })
+        //     );
+        //   },
+        //   (errer) => {
+        //     dispatch(
+        //       setSnackbar({
+        //         snackbarOpen: true,
+        //         snackbarType: "error",
+        //         snackbarMessage: ` error ${errer} `,
+        //       })
+        //     );
+        //   }
+        // );
+        // dispatch(
+        //   setSnackbar({
+        //     snackbarOpen: true,
+        //     snackbarType: "success",
+        //     snackbarMessage: `${cart} imported successfully `,
+        //   })
+        // );
       },
       (errer) => {
         dispatch(
@@ -107,9 +163,9 @@ const UserPropile: FC = () => {
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <AccountCircleIcon color="action" sx={{ mr: 1 }} />
           <Box>
-            <Typography variant="subtitle1">Yoni Levy</Typography>
+            <Typography variant="subtitle1">{user?.user_name}</Typography>
             <Typography variant="caption" display="block" gutterBottom>
-              customer
+              {user?.user_role}
             </Typography>
           </Box>
         </Box>
@@ -118,13 +174,13 @@ const UserPropile: FC = () => {
             <ListItemIcon>
               <EmailIcon />
             </ListItemIcon>
-            <ListItemText primary="Email" secondary="test@test.com" />
+            <ListItemText primary="Email" secondary={user?.user_email} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <PhoneIcon />
             </ListItemIcon>
-            <ListItemText primary="Phone" secondary="058-9662754" />
+            <ListItemText primary="Phone" secondary={user?.user_phone} />
           </ListItem>
         </List>
         <Button
@@ -169,6 +225,52 @@ const UserPropile: FC = () => {
         >
           Schedule a meeting
         </Button>
+      </Paper>
+
+      <Paper
+        sx={{
+          my: 1,
+          mx: "auto",
+          p: 2,
+        }}
+      >
+        {cart ? (
+          <>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <AccountCircleIcon color="action" sx={{ mr: 1 }} />
+              <Box>
+                <Typography variant="subtitle1">{cart?.cart_id}</Typography>
+              </Box>
+            </Box>
+            <List dense>
+              {cart?.items.map((product, index) => {
+                return (
+                  <>
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary="Product Name"
+                        secondary={product?.Product?.product_name}
+                      />
+                    </ListItem>
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary="Product Price"
+                        secondary={product?.Product?.product_price}
+                      />
+                    </ListItem>
+                  </>
+                );
+              })}
+            </List>
+          </>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <AccountCircleIcon color="action" sx={{ mr: 1 }} />
+            <Box>
+              <Typography variant="subtitle1">no carts</Typography>
+            </Box>
+          </Box>
+        )}
       </Paper>
 
       <Item

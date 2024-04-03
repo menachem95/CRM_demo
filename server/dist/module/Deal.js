@@ -15,7 +15,8 @@ Deal.init({
     },
     cart_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-        primaryKey: true, references: {
+        primaryKey: true,
+        references: {
             model: "carts",
             key: "cart_id",
         },
@@ -30,10 +31,19 @@ Deal.init({
     },
     agent_id: {
         type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-        allowNull: true, references: {
+        allowNull: true,
+        references: {
             model: "users",
             key: "user_id",
         },
+    },
+    inProgress: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: true,
+    },
+    status: {
+        type: sequelize_1.DataTypes.STRING(10),
+        allowNull: true,
     },
 }, {
     tableName: "deals",

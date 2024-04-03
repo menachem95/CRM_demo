@@ -31,6 +31,8 @@ class Cart
     });
     return items
   }
+
+ 
   // public createdAt!: Date; // הוספת שדה תאריך יצירה
   // public updatedAt!: Date; // הוספת שדה תאריך עדכון
   // ניתן להוסיף כאן מתודות מופע ומחלקה

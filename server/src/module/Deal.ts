@@ -6,6 +6,8 @@ interface DealAttributes {
   cart_id: number;
   customer_id: number;
   agent_id?: number;
+  inProgress?: boolean;
+  status?: boolean;
 }
 
 interface DealCreationAttributes extends Optional<DealAttributes, "deal_id"> {}
@@ -18,6 +20,8 @@ class Deal
   public cart_id!: number;
   public customer_id!: number;
   public agent_id!: number;
+  public inProgress?: boolean;
+  public status?: boolean;
 
   // ניתן להוסיף כאן מתודות מופע ומחלקה
 }
@@ -31,7 +35,8 @@ Deal.init(
     },
     cart_id: {
       type: DataTypes.INTEGER.UNSIGNED,
-      primaryKey: true, references: {
+      primaryKey: true,
+      references: {
         model: "carts",
         key: "cart_id",
       },
@@ -45,12 +50,20 @@ Deal.init(
       },
     },
     agent_id: {
-
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true, references: {
+      allowNull: true,
+      references: {
         model: "users",
         key: "user_id",
       },
+    },
+    inProgress: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.STRING(10),
+      allowNull: true,
     },
   },
   {

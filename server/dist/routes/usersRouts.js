@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const controlers_1 = __importDefault(require("../controlers"));
+const User_1 = __importDefault(require("../module/User"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const router = (0, express_1.Router)();
 router.post("/create_user", async (req, res) => {
@@ -37,19 +38,18 @@ router.post("/create_user", async (req, res) => {
 //     res.status(500).json({ error, message: "error" });
 //   }
 // });
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     // const user_role = req.params.user_role as UserRole;
-//     const meetings = await db.meetinges.getAllYourMeetingsByUserId(
-//       id,
-//       // user_role
-//     );
-//     res.json(meetings);
-//   } catch (error) {
-//     res.status(500).json({ error, message: "error" });
-//   }
-// });
+router.get("/get_current_cart/:customer_id", async (req, res) => {
+    try {
+        const customer_id = req.params.customer_id;
+        console.log("customer_id: ", customer_id);
+        const cartItems = await User_1.default.getCurrentCartInProgres(+customer_id);
+        console.log("cartItems", cartItems);
+        res.json(cartItems);
+    }
+    catch (error) {
+        res.status(500).json({ error, message: "error" });
+    }
+});
 router.get("/get_all_user_info/:user_id", async (req, res) => {
     try {
         const user_id = req.params.user_id;

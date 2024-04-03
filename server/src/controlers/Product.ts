@@ -30,7 +30,7 @@ export const addProductToCart = async (cartItem: CartItemAttributes) => {
   try {
     const cart_id = cartItem.cart_id
    await CartItem.create(cartItem)
-   let items = await Cart.getItemsForCart(cart_id); 
+   const items = await Cart.getItemsForCart(cart_id); 
    
    console.log("items: ", items);
      return {cart_id, items};
