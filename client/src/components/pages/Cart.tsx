@@ -37,7 +37,7 @@ import {
   CartItemsFromTheServer,
 } from "../../typs/products_and_carts";
 
-import { fetchWithBody as deleteCart } from "../../functions/fetch";
+import { jenericFetch as deleteCart } from "../../functions/jenericFetch";
 
 // const rows = fetchUsers()
 

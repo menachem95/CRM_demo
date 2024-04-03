@@ -9,7 +9,7 @@ interface FetchOptions<TBody> {
     headers?: HeadersInit;
   }
   
-export async function fetchWithBody<TBody, TResponse>(
+export async function jenericFetch<TBody, TResponse>(
     options: FetchOptions<TBody>,
     onSuccess: (data: TResponse) => void,
     onError: (error: Error) => void

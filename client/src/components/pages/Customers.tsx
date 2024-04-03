@@ -20,6 +20,8 @@ import { Controller, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
 
+import { jenericFetch as addUser } from "../../functions/jenericFetch";
+
 interface User {
   id: string;
   user_id: string;
@@ -29,8 +31,6 @@ interface User {
   user_role: string;
   add_relations?: boolean;
 }
-
-
 
 const columns: GridColDef[] = [
   { field: "user_name", headerName: "Name", width: 150 },
@@ -55,14 +55,16 @@ const API_URI = process.env.REACT_APP_API_SERVER as string;
 const CustomersPage: FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const {user_name, user_id} = useSelector((state: RootState) => state.user.userInfo)
+  const { user_name, user_id } = useSelector(
+    (state: RootState) => state.user.userInfo
+  );
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<Partial<User>>();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const fetchUsers = async () => {
     try {
@@ -74,9 +76,8 @@ const CustomersPage: FC = () => {
       for (let i = 0; i < data.length; i++) {
         data[i].id = data[i].user_id;
       }
-     
-      setUsers(data);
 
+      setUsers(data);
     } catch (error) {
       console.error("Failed to fetch users:", error);
     }
@@ -100,43 +101,84 @@ const CustomersPage: FC = () => {
     buttonTitle: "Add customer",
   };
 
-  const addUser = async (data: Partial<User>) => {
-    const {add_relations} = data
-    console.log("data: ", data);
-    delete data.add_relations
-    console.log("data: ", data);
-    
-    console.log("add_relations: ", add_relations)
-    console.log(`${API_URI}users/add_user${add_relations ? `?${user_id}` : ""}`);
-    
-    try {
-      const response = await fetch(`${API_URI}users/create_user${add_relations ? `?add_relations=${user_id}` : ""}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-      console.log(response1);
-      console.log("User added successfully");
-      handleDrawerClose();
-      reset();
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "User added successfully"}));
-      fetchUsers();
-    } catch (error) {
-      console.error("Failed to add user:", error);
-     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to add user"}));
-    } 
-  };
+  // const addUser = async (data: Partial<User>) => {
+  //   const {add_relations} = data
+  //   console.log("data: ", data);
+  //   delete data.add_relations
+  //   console.log("data: ", data);
+
+  //   console.log("add_relations: ", add_relations)
+  //   console.log(`${API_URI}users/add_user${add_relations ? `?${user_id}` : ""}`);
+
+  //   try {
+  //     const response = await fetch(`${API_URI}users/create_user${add_relations ? `?add_relations=${user_id}` : ""}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+  //     console.log(response1);
+  //     console.log("User added successfully");
+  //     handleDrawerClose();
+  //     reset();
+  //     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "User added successfully"}));
+  //     fetchUsers();
+  //   } catch (error) {
+  //     console.error("Failed to add user:", error);
+  //    dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to add user"}));
+  //   }
+  // };
   // פונקציה שתפעל בשליחת הטופס
+
+  const handleSuccess = () => {
+    handleDrawerClose();
+    reset();
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "success",
+        snackbarMessage: "User added successfully",
+      })
+    );
+    fetchUsers();
+  };
+
+  const handleError = () => {
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "error",
+        snackbarMessage: "Failed to add user",
+      })
+    );
+  };
   const onSubmit = async (data: Partial<User>) => {
     console.log("data", data);
-
-    addUser({ ...data, user_role: "CUSTOMER" });
+    const { add_relations } = data;
+    console.log("data: ", data);
+    delete data.add_relations;
+    console.log("data: ", data);
+    // addUser<>({ ...data, user_role: "CUSTOMER" });
+    const body: Partial<User> = {
+      ...data,
+      user_role: "CUSTOMER",
+    };
+    addUser<Partial<User>, User>(
+      {
+        url: `${API_URI}users/create_user${
+          add_relations ? `?add_relations=${user_id}` : ""
+        }`,
+        method: "POST",
+        body: body,
+      },
+      handleSuccess,
+      handleError
+    );
   };
 
   return (
@@ -166,7 +208,7 @@ const CustomersPage: FC = () => {
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
-        <Table rows={val.rows} columns={val.columns} cellType="user_name"/>
+        <Table rows={val.rows} columns={val.columns} cellType="user_name" />
         {/* </TableContainer> */}
       </Box>
       <Drawer
@@ -256,12 +298,16 @@ const CustomersPage: FC = () => {
               />
             )}
           />
-        <Controller
-        name="add_relations"
-        control={control}
-        
-        render={({ field }) =><FormControlLabel control={<Checkbox {...field}/>} label="שייך לקוח ישירות אלי" /> }
-      />
+          <Controller
+            name="add_relations"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} />}
+                label="שייך לקוח ישירות אלי"
+              />
+            )}
+          />
 
           <Button
             type="submit"
