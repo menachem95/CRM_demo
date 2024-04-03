@@ -39,6 +39,18 @@ const router = (0, express_1.Router)();
 //     res.status(500).json({ error, message: "error" });
 //   }
 // });
+router.post("/create_cart", async (req, res) => {
+    try {
+        const customer_id = req.body.customer_id;
+        const cart = (await controlers_1.default.cart.createCart(customer_id));
+        console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
+        const cart_id = cart.dataValues.cart_id;
+        return { cart_id, items: [] };
+    }
+    catch (error) {
+        res.status(500).json({ error, message: "error" });
+    }
+});
 router.get("/", async (req, res) => {
     try {
         console.log("carts");

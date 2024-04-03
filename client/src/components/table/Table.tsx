@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { FC, useState } from 'react';
 import { DataGrid, GridCellParams, GridColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
-import {Box, Typography, Paper} from '@mui/material'
+import {Box, Typography, Paper, List, ListItem, ListItemText, ListItemIcon} from '@mui/material'
 import {TableContainer} from '@mui/material';
 import {Button} from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { Popover } from '@mui/material';
+import CustomPopover from './CustomPopover';
 
+
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 // // const columns: GridColDef[] = [
   
@@ -120,7 +126,7 @@ import { Popover } from '@mui/material';
         </DialogContent>
       </Dialog> */}
       
-      <Popover
+      {/* <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -133,21 +139,138 @@ import { Popover } from '@mui/material';
           vertical: 'top',
           horizontal: 'center',
         }}
+      > */}
+      {/* <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+    >
+      <Typography sx={{ p: 2 }} variant="h6">User Details - Yoni Levy</Typography>
+      <List component="nav">
+        <ListItem>
+          <ListItemText primary="Role: Software Developer" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Email: yoni@example.com" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Phone: 050-1234567" />
+        </ListItem>
+      </List>
+      <Button variant="contained" color="primary" sx={{ m: 1 }}>Edit Details</Button>
+      <Button variant="contained" color="secondary" sx={{ m: 1 }}>Delete User</Button>
+      <Button variant="contained"  sx={{ m: 1 }}>Send Message</Button>
+    </Popover> */}
+
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      sx={{
+        '.MuiPopover-paper': {
+          p: 2,
+          maxWidth: 300,
+        },
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <AccountCircleIcon color="action" sx={{ mr: 1 }} />
+        <Box>
+          <Typography variant="subtitle1">Yoni Levy</Typography>
+          <Typography variant="caption" display="block" gutterBottom>
+            customer
+          </Typography>
+        </Box>
+      </Box>
+      <List dense>
+        <ListItem>
+          <ListItemIcon>
+            <EmailIcon />
+          </ListItemIcon>
+          <ListItemText primary="Email" secondary="test@test.com" />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <PhoneIcon />
+          </ListItemIcon>
+          <ListItemText primary="Phone" secondary="058-9662754" />
+        </ListItem>
+      </List>
+      <Button
+        variant="contained"
+        sx={{
+          mt: 1,
+          mr: 1,
+          backgroundColor: 'primary.main',
+          '&:hover': {
+            backgroundColor: 'primary.dark',
+          },
+        }}
+        startIcon={<MoreHorizIcon />}
       >
-        <Paper>
-           <Typography component="div" sx={{ p: 2 }}>
-            <Button>{cellType}</Button>
-          {/* Render the details here using selectedRow data */}
-          {selectedRow && <div>Details about {selectedRow[cellType]}</div>}
-        </Typography>
-        <Typography>
-        {/* {selectedRow.user_name} */}
-        </Typography>
-        </Paper>
-       
-      </Popover>
+        More details
+      </Button>
+      <Button
+        variant="outlined"
+        sx={{
+          mt: 1,
+          mr: 1,
+          borderColor: 'primary.main',
+          color: 'primary.main',
+          '&:hover': {
+            backgroundColor: 'primary.light',
+          },
+        }}
+      >
+        Create a Deal
+      </Button>
+      <Button
+        variant="outlined"
+        sx={{
+          mt: 1,
+          borderColor: 'primary.main',
+          color: 'primary.main',
+          '&:hover': {
+            backgroundColor: 'primary.light',
+          },
+        }}
+      >
+        Schedule a meeting
+      </Button>
+    </Popover>
+        
+        {/* <CustomPopover /> */}
+      {/* </Popover> */}
          </div>
     );
   }
 
   export default Table
+
+{/* <Paper> */}
+          //  <Typography component="div" sx={{ p: 2 }}>
+            // <Button>{cellType}</Button>
+          {/* Render the details here using selectedRow data */}
+          {/* {selectedRow && <div>Details about {selectedRow[cellType]}</div>} */}
+          // {selectedRow[cellType]}
+        // </Typography>
+        // <Typography>
+        {/* {selectedRow.user_name} */}
+        // </Typography>
+        // </Paper>

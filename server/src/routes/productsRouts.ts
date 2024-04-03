@@ -26,13 +26,10 @@ router.post("/add_product_to_cart", async (req, res) => {
     console.log("product_id: ", product_id);
     console.log("customer_id: ", +customer_id);
     console.log("cart_id: ", cart_id);
-    //אם אין עגלה אז צריך ליצור עגלה חדשה וזה אומר ליצור גם דיל חדש וזה אומר גם להשיג את ה איידי של הלקוח
 
-    // let cart_Item_id = req.query.cart_Item_id;
     if (cart_id === undefined) {
-      console.log(88888888888888888888888888888888888888888888888888888888888888888888888888888888888)
       try {
-        const cart = (await controlers.cart.createCart(+customer_id)) as Cart;
+        const cart = (await controlers.cart.createCart(customer_id)) as Cart;
         console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
         cart_id = cart.dataValues.cart_id;
       } catch (error) {
@@ -53,30 +50,6 @@ router.post("/add_product_to_cart", async (req, res) => {
   }
 });
 
-// router.put("/update_meeting/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const updatedMeeting: MeetingRow = { ...req.body };
-//     const result = await db.meetinges.updateMeeting(updatedMeeting, id);
-//     res.json(result);
-//   } catch (error) {
-//     res.status(500).json({ error, message: "error" });
-//   }
-// });
-
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     // const user_role = req.params.user_role as UserRole;
-//     const meetings = await db.meetinges.getAllYourMeetingsByUserId(
-//       id,
-//       // user_role
-//     );
-//     res.json(meetings);
-//   } catch (error) {
-//     res.status(500).json({ error, message: "error" });
-//   }
-// });
 
 router.get("/", async (req, res) => {
   try {

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import controlers from "../controlers";
+import { Cart } from "../module";
 
 const router = Router();
 
@@ -38,6 +39,18 @@ const router = Router();
 //     res.status(500).json({ error, message: "error" });
 //   }
 // });
+
+router.post("/create_cart", async (req, res) => {
+  try {
+    const customer_id: number = req.body.customer_id;
+    const cart = (await controlers.cart.createCart(customer_id)) as Cart;
+    console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
+    const cart_id = cart.dataValues.cart_id;
+    return { cart_id, items: [] };
+  } catch (error) {
+    res.status(500).json({ error, message: "error" });
+  }
+});
 
 router.get("/", async (req, res) => {
   try {

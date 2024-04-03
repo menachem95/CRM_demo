@@ -37,6 +37,8 @@ import {
   CartItemsFromTheServer,
 } from "../../typs/products_and_carts";
 
+import { fetchWithBody as deleteCart } from "../../functions/fetch";
+
 // const rows = fetchUsers()
 
 const API_URI = process.env.REACT_APP_API_SERVER as string;
@@ -55,40 +57,74 @@ const Cart: FC = () => {
 
   console.log("cart: ", cart);
 
-  const deleteCart = async () => {
-    try {
-      const response = await fetch(`${API_URI}carts/${cart.cart_id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-      dispatch(removeCart());
-      dispatch(
-        setSnackbar({
-          snackbarOpen: true,
-          snackbarType: "success",
-          snackbarMessage: "Cart removed successfully",
-        })
-      );
-      // fetchUsers();
-    } catch (error) {
-      console.error("Failed to remove cart:", error);
-      dispatch(
-        setSnackbar({
-          snackbarOpen: true,
-          snackbarType: "error",
-          snackbarMessage: "Failed to remove cart",
-        })
-      );
-    } finally {
-      handleClose();
-    }
+  const handleSuccess = () => {
+    dispatch(removeCart());
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "success",
+        snackbarMessage: "Cart removed successfully",
+      })
+    );
+    handleClose();
   };
+
+  const handleError = () => {
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "error",
+        snackbarMessage: "Failed to remove cart",
+      })
+    );
+    handleClose();
+  };
+
+  const onClickHandler = () => {
+    deleteCart<undefined, null>(
+      {
+        url: `${API_URI}carts/${cart.cart_id}`,
+        method: "DELETE",
+      },
+      handleSuccess,
+      handleError
+    );
+  };
+
+  // const deleteCart = async () => {
+  //   try {
+  //     const response = await fetch(`${API_URI}carts/${cart.cart_id}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+  //     dispatch(removeCart());
+  //     dispatch(
+  //       setSnackbar({
+  //         snackbarOpen: true,
+  //         snackbarType: "success",
+  //         snackbarMessage: "Cart removed successfully",
+  //       })
+  //     );
+  //     // fetchUsers();
+  //   } catch (error) {
+  //     console.error("Failed to remove cart:", error);
+  //     dispatch(
+  //       setSnackbar({
+  //         snackbarOpen: true,
+  //         snackbarType: "error",
+  //         snackbarMessage: "Failed to remove cart",
+  //       })
+  //     );
+  //   } finally {
+  //     handleClose();
+  //   }
+  // };
   const dispatch = useDispatch();
   if (!cart.cart_id) {
     return <div>cart is ampty</div>;
@@ -182,7 +218,7 @@ const Cart: FC = () => {
           >
             ביטול{" "}
           </Button>
-          <Button onClick={deleteCart} variant="contained" color="primary">
+          <Button onClick={onClickHandler} variant="contained" color="primary">
             מחק עגלה
           </Button>
         </DialogActions>
