@@ -22,6 +22,8 @@ import { jenericFetch as getUserInfo } from "../../functions/jenericFetch";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { User } from "../../store/userSlice";
+import { createCart } from "../../functions/createCart";
+import { CartItemsFromTheServer } from "../../typs/products_and_carts";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,16 +34,13 @@ const Item = styled(Paper)(({ theme }) => ({
   flexGrow: 1,
 }));
 
-const API_URI = process.env.REACT_APP_API_SERVER as string;
-
 const UserPropile: FC = () => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   let { user_id } = useParams();
 
   const handleSuccess = (user: User) => {
-    
-   console.log(user)
-   
+    console.log(user);
+
     dispatch(
       setSnackbar({
         snackbarOpen: true,
@@ -49,7 +48,6 @@ const UserPropile: FC = () => {
         snackbarMessage: `${user.user_name} imported successfully `,
       })
     );
-    
   };
 
   const handleError = () => {
@@ -64,12 +62,38 @@ const UserPropile: FC = () => {
 
   getUserInfo<undefined, any>(
     {
-      url: `${API_URI}users/get_all_user_info/${user_id}`,
+      url: `users/get_all_user_info/${user_id}`,
       method: "GET",
     },
     handleSuccess,
     handleError
   );
+
+  const onCreateCartHandel = async()  => {
+  await  createCart(
+      user_id as string,
+      (cart) => {
+        
+        console.log("cart: ", cart);
+        dispatch(
+          setSnackbar({
+            snackbarOpen: true,
+            snackbarType: "success",
+            snackbarMessage: `${cart} imported successfully `,
+          })
+        );
+      },
+      (errer) => {
+        dispatch(
+          setSnackbar({
+            snackbarOpen: true,
+            snackbarType: "error",
+            snackbarMessage: ` error ${errer} `,
+          })
+        );
+      }
+    );
+  };
 
   return (
     <Box sx={{ flexGrow: 1, overflow: "hidden", px: 3 }}>
@@ -128,6 +152,7 @@ const UserPropile: FC = () => {
               backgroundColor: "primary.light",
             },
           }}
+          onClick={onCreateCartHandel}
         >
           Create a Deal
         </Button>

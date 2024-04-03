@@ -39,13 +39,13 @@ const router = (0, express_1.Router)();
 //     res.status(500).json({ error, message: "error" });
 //   }
 // });
-router.post("/create_cart", async (req, res) => {
+router.post("/create_cart/:customer_id", async (req, res) => {
     try {
-        const customer_id = req.body.customer_id;
-        const cart = (await controlers_1.default.cart.createCart(customer_id));
+        const customer_id = req.params.customer_id;
+        const cart = (await controlers_1.default.cart.createCart(+customer_id));
         console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
-        const cart_id = cart.dataValues.cart_id;
-        return { cart_id, items: [] };
+        const cart_id = cart.cart_id;
+        res.json({ cart_id, items: [] });
     }
     catch (error) {
         res.status(500).json({ error, message: "error" });

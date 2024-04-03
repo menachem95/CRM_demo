@@ -41,7 +41,6 @@ import { jenericFetch as deleteCart } from "../../functions/jenericFetch";
 
 // const rows = fetchUsers()
 
-const API_URI = process.env.REACT_APP_API_SERVER as string;
 
 const Cart: FC = () => {
   const { cart } = useSelector((state: RootState) => state.user);
@@ -83,7 +82,7 @@ const Cart: FC = () => {
   const onClickHandler = () => {
     deleteCart<undefined, null>(
       {
-        url: `${API_URI}carts/${cart.cart_id}`,
+        url: `carts/${cart.cart_id}`,
         method: "DELETE",
       },
       handleSuccess,

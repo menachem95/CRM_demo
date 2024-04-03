@@ -170,7 +170,7 @@ const CustomersPage: FC = () => {
     };
     addUser<Partial<User>, User>(
       {
-        url: `${API_URI}users/create_user${
+        url: `users/create_user${
           add_relations ? `?add_relations=${user_id}` : ""
         }`,
         method: "POST",

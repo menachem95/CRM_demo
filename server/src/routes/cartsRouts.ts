@@ -40,13 +40,14 @@ const router = Router();
 //   }
 // });
 
-router.post("/create_cart", async (req, res) => {
+router.post("/create_cart/:customer_id", async (req, res) => {
   try {
-    const customer_id: number = req.body.customer_id;
-    const cart = (await controlers.cart.createCart(customer_id)) as Cart;
+    const customer_id = req.params.customer_id;
+    const cart = (await controlers.cart.createCart(+customer_id)) as Cart;
     console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);
-    const cart_id = cart.dataValues.cart_id;
-    return { cart_id, items: [] };
+    const cart_id = cart.cart_id;
+
+    res.json({ cart_id, items: [] });
   } catch (error) {
     res.status(500).json({ error, message: "error" });
   }
