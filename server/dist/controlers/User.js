@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createRelationShip = exports.createUser = exports.getAllUsers = void 0;
+exports.createRelationShip = exports.createUser = exports.getUser = exports.getAllUsers = void 0;
 const module_1 = require("../module");
 const getAllUsers = async () => {
     try {
@@ -14,6 +14,18 @@ const getAllUsers = async () => {
     }
 };
 exports.getAllUsers = getAllUsers;
+const getUser = async (user_id) => {
+    try {
+        const user = await module_1.User.findByPk(user_id);
+        console.log(user);
+        return user;
+    }
+    catch (error) {
+        console.error("error:", error);
+        return error;
+    }
+};
+exports.getUser = getUser;
 const createUser = async (user) => {
     try {
         const newUser = await module_1.User.create(user);

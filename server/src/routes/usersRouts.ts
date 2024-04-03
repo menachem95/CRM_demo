@@ -57,6 +57,17 @@ router.post("/create_user", async (req, res) => {
 //   }
 // });
 
+router.get("/get_all_user_info/:user_id", async (req, res) => {
+  try {
+    const user_id = req.params.user_id
+    const users = await controlers.user.getUser(user_id);
+    console.log("users: ", users);
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error, message: "error" });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const users = await controlers.user.getAllUsers();

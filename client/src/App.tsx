@@ -11,6 +11,7 @@ import SignInSide from "./components/Login/SignInSide";
 import Products from "./components/pages/Products";
 import Cart from "./components/pages/Cart";
 import Deals from "./components/pages/Deals";
+import UserPropile from "./components/pages/UserPropile";
 // import { useDispatch } from "react-redux";
 // import { User, setUserInfo } from "./store/userSlice";
 
@@ -33,6 +34,9 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/deals" element={<Deals />} />
+        <Route path="/user_propile/:user_id" element={<UserPropile />} />
+
+        
 
        </Route>
        

@@ -14,6 +14,17 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getUser = async (user_id: string) => {
+  try {
+    const user = await User.findByPk(user_id);
+    console.log(user);
+    return user;
+  } catch (error) {
+    console.error("error:", error);
+    return error;
+  }
+};
+
 export const createUser = async (user: UserAttributes) => {
   try {
    const newUser = await User.create(user)
