@@ -244,26 +244,26 @@ const UserPropile: FC = () => {
                 <Typography variant="subtitle1">{cart.items.length === 0 ? "אין פריטים בעגלה" : cart?.cart_id}</Typography>
               </Box>
             </Box>
-            <List dense>
-              {cart?.items?.map((product, index) => {
+           
+              {cart?.items?.map((product) => {
                 return (
-                  <>
-                    <ListItem key={index}>
+                  <List dense key={product.product_id}>
+                    <ListItem >
                       <ListItemText
                         primary="Product Name"
                         secondary={product?.Product?.product_name}
                       />
                     </ListItem>
-                    <ListItem key={index}>
+                    <ListItem >
                       <ListItemText
                         primary="Product Price"
                         secondary={product?.Product?.product_price}
                       />
                     </ListItem>
-                  </>
+                   </List>
                 );
               })}
-            </List>
+           
           </>
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
