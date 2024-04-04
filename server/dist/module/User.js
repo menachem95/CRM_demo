@@ -9,23 +9,25 @@ const Deal_1 = __importDefault(require("./Deal"));
 const Cart_1 = __importDefault(require("./Cart"));
 class User extends sequelize_1.Model {
     static async getCurrentCartInProgres(customer_id) {
-        try {
-            const deal = await Deal_1.default.findOne({
-                where: { inProgress: true, customer_id },
-                // include: [
-                //   {
-                //     model: Cart, // ודא שמודל Product מיובא ומוגדר כראוי
-                //     // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
-                //   },
-                // ],
-            });
+        const deal = await Deal_1.default.findOne({
+            where: { inProgress: true, customer_id },
+            // include: [
+            //   {
+            //     model: Cart, // ודא שמודל Product מיובא ומוגדר כראוי
+            //     // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
+            //   },
+            // ],
+        });
+        console.log("deal", deal);
+        if (!deal) {
+            console.error("Deal not found for customer ID:", customer_id);
+            throw new Error("deal not found");
+        }
+        else {
             const cart_id = deal.cart_id;
             const items = await Cart_1.default.getItemsForCart(+cart_id);
             console.log("items: ", items);
             return { cart_id, items };
-        }
-        catch (error) {
-            console.log("error: ", error);
         }
     }
 }

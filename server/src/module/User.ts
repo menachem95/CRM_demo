@@ -25,7 +25,7 @@ class User
   public user_password!: string;
 
   static async getCurrentCartInProgres(customer_id: number) {
-    try {
+  
       const deal = await Deal.findOne({
         where: { inProgress: true, customer_id },
         // include: [
@@ -36,13 +36,17 @@ class User
 
         // ],
       });
-      const cart_id = deal!.cart_id;
-      const items = await Cart.getItemsForCart(+cart_id);
-      console.log("items: ", items);
-      return { cart_id, items };
-    } catch (error) {
-      console.log("error: ", error);
-    }
+      console.log("deal", deal);
+      if (!deal) {
+        console.error("Deal not found for customer ID:", customer_id);
+        throw new Error("deal not found");
+      } else {
+        const cart_id = deal!.cart_id;
+        const items = await Cart.getItemsForCart(+cart_id);
+        console.log("items: ", items);
+        return { cart_id, items };
+      }
+  
   }
 
   // ניתן להוסיף כאן מתודות מופע ומחלקה

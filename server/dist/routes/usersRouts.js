@@ -38,16 +38,28 @@ router.post("/create_user", async (req, res) => {
 //     res.status(500).json({ error, message: "error" });
 //   }
 // });
+// router.get("/get_current_cart/:customer_id", async (req, res) => {
+//   try {
+//     const customer_id = req.params.customer_id;
+//     console.log("customer_id: ", customer_id)
+//     const cartItems = await User.getCurrentCartInProgres(+customer_id);
+//    console.log("cartItems", cartItems)
+//     res.json(cartItems);
+//   } catch (error) {
+//     res.status(500).json({ error, message: "error" });
+//   }
+// });
 router.get("/get_current_cart/:customer_id", async (req, res) => {
     try {
-        const customer_id = req.params.customer_id;
+        const customer_id = +req.params.customer_id;
         console.log("customer_id: ", customer_id);
-        const cartItems = await User_1.default.getCurrentCartInProgres(+customer_id);
+        const cartItems = await User_1.default.getCurrentCartInProgres(customer_id);
         console.log("cartItems", cartItems);
         res.json(cartItems);
     }
     catch (error) {
-        res.status(500).json({ error, message: "error" });
+        console.error("error: ", error);
+        res.status(500).json({ message: error.message || "An error occurred" });
     }
 });
 router.get("/get_all_user_info/:user_id", async (req, res) => {

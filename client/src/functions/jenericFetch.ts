@@ -25,10 +25,13 @@ export async function jenericFetch<TBody, TResponse>(
     });
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+      // throw new Error(`Error: ${response.status}`);
+      onError(new Error(`Error: ${response.status}`))
     }
 
     const data: TResponse = await response.json();
+
+    
 
     onSuccess(data);
   } catch (error) {

@@ -80,25 +80,26 @@ const UserPropile: FC = () => {
       user_id as string,
       (CartItem) => {
         console.log("cartItems: ", CartItem);
-        debugger
+        
         setCart(CartItem);
         
-        dispatch(
-          setSnackbar({
-            snackbarOpen: true,
-            snackbarType: "success",
-            snackbarMessage: `${CartItem} imported successfully `,
-          })
-        );
+        // dispatch(
+        //   setSnackbar({
+        //     snackbarOpen: true,
+        //     snackbarType: "success",
+        //     snackbarMessage: `${CartItem} imported successfully `,
+        //   })
+        // );
       },
-      (errer) => {
-        dispatch(
-          setSnackbar({
-            snackbarOpen: true,
-            snackbarType: "error",
-            snackbarMessage: ` error ${errer} `,
-          })
-        );
+      (error) => {
+        console.log(error)
+        // dispatch(
+        //   setSnackbar({
+        //     snackbarOpen: true,
+        //     snackbarType: "error",
+        //     snackbarMessage: ` error ${error} `,
+        //   })
+        // );
       }
     );
   }, []);
@@ -234,16 +235,17 @@ const UserPropile: FC = () => {
           p: 2,
         }}
       >
-        {cart ? (
+        
+        {cart?.items ? (
           <>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               <AccountCircleIcon color="action" sx={{ mr: 1 }} />
               <Box>
-                <Typography variant="subtitle1">{cart?.cart_id}</Typography>
+                <Typography variant="subtitle1">{cart.items.length === 0 ? "אין פריטים בעגלה" : cart?.cart_id}</Typography>
               </Box>
             </Box>
             <List dense>
-              {cart?.items.map((product, index) => {
+              {cart?.items?.map((product, index) => {
                 return (
                   <>
                     <ListItem key={index}>
@@ -265,14 +267,13 @@ const UserPropile: FC = () => {
           </>
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <AccountCircleIcon color="action" sx={{ mr: 1 }} />
             <Box>
-              <Typography variant="subtitle1">no carts</Typography>
+              <Typography variant="subtitle1">no cart</Typography>
             </Box>
           </Box>
         )}
       </Paper>
-
+ 
       <Item
         sx={{
           my: 1,
