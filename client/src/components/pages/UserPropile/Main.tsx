@@ -18,16 +18,18 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useParams } from "react-router-dom";
-import { jenericFetch as getUserInfo } from "../../functions/jenericFetch";
+import { jenericFetch as getUserInfo } from "../../../functions/jenericFetch";
 import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../store/snackbarSlice";
-import { User } from "../../store/userSlice";
-import { createCart } from "../../functions/createCart";
+import { setSnackbar } from "../../../store/snackbarSlice";
+import { User } from "../../../store/userSlice";
+import { createCart } from "../../../functions/createCart";
 import {
   CartItem,
   CartItemsFromTheServer,
-} from "../../typs/products_and_carts";
-import { getUserCurrentCart } from "../../functions/userInfo";
+} from "../../../typs/products_and_carts";
+import { getUserCurrentCart } from "../../../functions/userInfo";
+import UserCart from "./UserCart";
+import Empty from "./Empty";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -38,11 +40,13 @@ const Item = styled(Paper)(({ theme }) => ({
   flexGrow: 1,
 }));
 
-const UserPropile: FC = () => {
+const Main: FC = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState<User>();
-  const [cart, setCart] = useState<CartItemsFromTheServer>();
-  let { user_id } = useParams();
+
+  const { user_id } = useParams() as { user_id: string };
+
+  
 
   useEffect(() => {
     const handleSuccess = (user: User) => {
@@ -74,33 +78,6 @@ const UserPropile: FC = () => {
       },
       handleSuccess,
       handleError
-    );
-
-    getUserCurrentCart(
-      user_id as string,
-      (CartItem) => {
-        console.log("cartItems: ", CartItem);
-        
-        setCart(CartItem);
-        
-        // dispatch(
-        //   setSnackbar({
-        //     snackbarOpen: true,
-        //     snackbarType: "success",
-        //     snackbarMessage: `${CartItem} imported successfully `,
-        //   })
-        // );
-      },
-      (error) => {
-        console.log(error)
-        // dispatch(
-        //   setSnackbar({
-        //     snackbarOpen: true,
-        //     snackbarType: "error",
-        //     snackbarMessage: ` error ${error} `,
-        //   })
-        // );
-      }
     );
   }, []);
 
@@ -151,6 +128,7 @@ const UserPropile: FC = () => {
       }
     );
   };
+
 
   return (
     <Box sx={{ flexGrow: 1, overflow: "hidden", px: 3 }}>
@@ -228,52 +206,8 @@ const UserPropile: FC = () => {
         </Button>
       </Paper>
 
-      <Paper
-        sx={{
-          my: 1,
-          mx: "auto",
-          p: 2,
-        }}
-      >
-        
-        {cart?.items ? (
-          <>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <AccountCircleIcon color="action" sx={{ mr: 1 }} />
-              <Box>
-                <Typography variant="subtitle1">{cart.items.length === 0 ? "אין פריטים בעגלה" : cart?.cart_id}</Typography>
-              </Box>
-            </Box>
-           
-              {cart?.items?.map((product) => {
-                return (
-                  <List dense key={product.product_id}>
-                    <ListItem >
-                      <ListItemText
-                        primary="Product Name"
-                        secondary={product?.Product?.product_name}
-                      />
-                    </ListItem>
-                    <ListItem >
-                      <ListItemText
-                        primary="Product Price"
-                        secondary={product?.Product?.product_price}
-                      />
-                    </ListItem>
-                   </List>
-                );
-              })}
-           
-          </>
-        ) : (
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <Box>
-              <Typography variant="subtitle1">no cart</Typography>
-            </Box>
-          </Box>
-        )}
-      </Paper>
- 
+    <UserCart user_id={user_id} />
+
       <Item
         sx={{
           my: 1,
@@ -301,4 +235,4 @@ const UserPropile: FC = () => {
   // </Box>;
 };
 
-export default UserPropile;
+export default Main;

@@ -86,9 +86,9 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
 
-  const handleCellClick = (params: GridCellParams, event: React.MouseEvent<HTMLElement>, cellType: string) => {
+  const handleCellClick = (params: GridRowParams, event: React.MouseEvent<HTMLElement>, cellType: string) => {
     console.log("params: ", params);
-    if(params.field !== cellType) return;
+    // if(params.id !== cellType) return;
     setSelectedRow(params.row);
     setAnchorEl(event.currentTarget);
   };
@@ -114,7 +114,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
           pageSizeOptions={[5, 10]}
           // rowSelection={false}
           // onRowClick={handleRowClick}
-          onCellClick={(p,e) => handleCellClick(p,e,cellType)}
+          // onCellClick={(p,e) => handleCellClick(p,e,cellType)}
+          onRowClick={(p,e) => handleCellClick(p,e,cellType)}
           // checkboxSelection
           
         />
@@ -185,11 +186,11 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
       sx={{
         '.MuiPopover-paper': {
           p: 2,
-          maxWidth: 300,
+          maxWidth: "100%",
         },
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+    {/*   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <AccountCircleIcon color="action" sx={{ mr: 1 }} />
         <Box>
           <Typography variant="subtitle1">Yoni Levy</Typography>
@@ -253,10 +254,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
       >
         Schedule a meeting
       </Button>
-    </Popover>
+    </Popover> */}
         
-        {/* <CustomPopover /> */}
-      {/* </Popover> */}
+        <CustomPopover />
+      </Popover>
          </div>
     );
   }

@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { resetUserInfo } from "../store/userSlice";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Console } from "console";
 // import { ReactComponent as MyLogo } from '../img/43162.svg';
 // import logo from "../img/logo.png"
 

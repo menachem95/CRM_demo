@@ -11,7 +11,7 @@ import SignInSide from "./components/Login/SignInSide";
 import Products from "./components/pages/Products";
 import Cart from "./components/pages/Cart";
 import Deals from "./components/pages/Deals";
-import UserPropile from "./components/pages/UserPropile";
+import UserPropile from "./components/pages/UserPropile/Main";
 // import { useDispatch } from "react-redux";
 // import { User, setUserInfo } from "./store/userSlice";
 
