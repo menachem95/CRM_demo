@@ -6,28 +6,29 @@ import {
   ListItem,
   ListItemText,
   Button,
+  Divider,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { getUserCurrentCart } from "../../../functions/userInfo";
 import { CartItemsFromTheServer } from "../../../typs/products_and_carts";
 import Empty from "./Empty";
 import { setSnackbar } from "../../../store/snackbarSlice";
-import { createCart } from "../../../functions/createCart";
+import { addProductToCart, createCart } from "../../../functions/cart&Product";
 import { useDispatch } from "react-redux";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
+import { User } from "../../../store/userSlice";
 
 interface Props {
-  user_id: string;
+  user: User;
 }
 
-const UserCart: FC<Props> = ({ user_id }) => {
+const UserCart: FC<Props> = ({ user }) => {
   const [cart, setCart] = useState<CartItemsFromTheServer>();
   const dispatch = useDispatch();
 
   const onCreateCartHandel = async () => {
     await createCart(
-      user_id as string,
+      user.user_id as string,
       (cart) => {
         console.log("cart: ", cart);
         // getUserCurrentCart(
@@ -75,7 +76,7 @@ const UserCart: FC<Props> = ({ user_id }) => {
 
   useEffect(() => {
     getUserCurrentCart(
-      user_id,
+      user.user_id,
       (CartItem) => {
         console.log("cartItems: ", CartItem);
 
@@ -101,6 +102,15 @@ const UserCart: FC<Props> = ({ user_id }) => {
       }
     );
   }, []);
+
+  // const onAddProduct = async () => {
+  //   addProductToCart(body: {})
+  //   ;
+  // };
+
+  const cartNotEmpty = `Cart Id: ${cart?.cart_id}`;
+  const cartEmpty = `Cart Id: ${cart?.cart_id} - No Items Found`;
+
   return (
     <Paper
       sx={{
@@ -115,11 +125,26 @@ const UserCart: FC<Props> = ({ user_id }) => {
             {/* <AccountCircleIcon color="action" sx={{ mr: 1 }} /> */}
             <Box>
               <Typography variant="subtitle1">
-                {cart.items.length === 0 ? "אין פריטים בעגלה" : cart?.cart_id}
+                {cart.items.length === 0 ? cartEmpty : cartNotEmpty}
               </Typography>
             </Box>
           </Box>
-
+          {/* <Divider  /> */}
+          <Divider textAlign="right">
+            <Button
+              variant="contained"
+              sx={{
+                mt: 1,
+                mr: 1,
+                backgroundColor: "primary.main",
+                "&:hover": {
+                  backgroundColor: "primary.dark",
+                },
+              }}
+              onClick={onCreateCartHandel}
+            >
+Add products            </Button>
+          </Divider>
           {cart?.items?.map((product) => {
             return (
               <List dense key={product.product_id}>
@@ -141,25 +166,23 @@ const UserCart: FC<Props> = ({ user_id }) => {
         </>
       ) : (
         <Empty
-          user_id={user_id}
+          user={user}
           icon={() => <ShoppingCartIcon />}
-          message={"message"}
+          message={`No cart found for ${user.user_name}`}
           action={() => (
             <Button
-              variant="outlined"
+              variant="contained"
               sx={{
                 mt: 1,
                 mr: 1,
-                borderColor: "primary.main",
-                color: "primary.main",
+                backgroundColor: "primary.main",
                 "&:hover": {
-                  backgroundColor: "primary.light",
+                  backgroundColor: "primary.dark",
                 },
               }}
               onClick={onCreateCartHandel}
             >
-              Create a Deal
-            </Button>
+creat a deal            </Button>
           )}
         />
         // <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>

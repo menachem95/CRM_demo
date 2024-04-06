@@ -22,11 +22,7 @@ router.post("/add_product_to_cart", async (req, res) => {
         const product_id = req.body.product_id;
         const customer_id = req.body.customer_id;
         let cart_id = req.body.cart_id;
-        console.log("***************************");
-        console.log("product_id: ", product_id);
-        console.log("customer_id: ", +customer_id);
-        console.log("cart_id: ", cart_id);
-        if (cart_id === undefined) {
+        if (!cart_id) {
             try {
                 const cart = (await controlers_1.default.cart.createCart(customer_id));
                 console.log("cart.dataValues.cart_id: ", cart.dataValues.cart_id);

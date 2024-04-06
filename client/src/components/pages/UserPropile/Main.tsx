@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Divider,
   List,
   ListItem,
   ListItemIcon,
@@ -22,7 +23,7 @@ import { jenericFetch as getUserInfo } from "../../../functions/jenericFetch";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../../store/snackbarSlice";
 import { User } from "../../../store/userSlice";
-import { createCart } from "../../../functions/createCart";
+import { createCart } from "../../../functions/cart&Product";
 import {
   CartItem,
   CartItemsFromTheServer,
@@ -30,23 +31,22 @@ import {
 import { getUserCurrentCart } from "../../../functions/userInfo";
 import UserCart from "./UserCart";
 import Empty from "./Empty";
+import CustomButton from "../../UI/CustomButton";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  flexGrow: 1,
-}));
+// const Item = styled(Paper)(({ theme }) => ({
+//   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: "center",
+//   color: theme.palette.text.secondary,
+//   flexGrow: 1,
+// }));
 
 const Main: FC = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState<User>();
 
   const { user_id } = useParams() as { user_id: string };
-
-  
 
   useEffect(() => {
     const handleSuccess = (user: User) => {
@@ -129,9 +129,8 @@ const Main: FC = () => {
     );
   };
 
-
   return (
-    <Box sx={{ flexGrow: 1, overflow: "hidden", px: 3 }}>
+    <Box sx={{ flexGrow: 1, overflow: "hidden", px: 3, paddingTop: 2 }}>
       <Paper
         sx={{
           my: 1,
@@ -148,6 +147,7 @@ const Main: FC = () => {
             </Typography>
           </Box>
         </Box>
+        <Divider  />
         <List dense>
           <ListItem>
             <ListItemIcon>
@@ -206,9 +206,9 @@ const Main: FC = () => {
         </Button>
       </Paper>
 
-    <UserCart user_id={user_id} />
+      {user && <UserCart user={user} />}
 
-      <Item
+      {/* <Item
         sx={{
           my: 1,
           mx: "auto",
@@ -223,7 +223,7 @@ const Main: FC = () => {
             <Typography noWrap>{"message"}</Typography>
           </Stack>
         </Stack>
-      </Item>
+      </Item> */}
     </Box>
   );
   //   <Box sx={{ width: "auto" }}>

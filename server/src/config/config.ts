@@ -25,3 +25,4 @@ sequelize
   // sequelize.sync();
 
 export default sequelize;
+

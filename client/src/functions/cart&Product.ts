@@ -20,3 +20,20 @@ export const createCart = async (
     handleError
   );
 };
+
+export const addProductToCart = async (
+  body: {cart_id: string, costumer_id: string},
+  handleSuccess: (cart: CartItemsFromTheServer) => void,
+  handleError: (error: Error) => void
+) => {
+    
+  await jenericFetch<{cart_id: string, costumer_id: string}, CartItemsFromTheServer>(
+    {
+      url: `products/add_product_to_cart`,
+      method: "POST",
+      body
+    },
+    handleSuccess,
+    handleError
+  );
+};
