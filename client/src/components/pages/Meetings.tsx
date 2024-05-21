@@ -20,6 +20,7 @@ import { Controller, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
 import { log } from "console";
+import { jenericFetch } from "../../functions/jenericFetch";
 
 interface Meeting {
   id: string;
@@ -66,26 +67,40 @@ const MeetingSPage: FC = () => {
   } = useForm<Partial<Meeting>>();
   const dispatch = useDispatch();
 
-  const fetchMeeting = async () => {
-    try {
-      const response = await fetch(`${API_URI}meetings/${user_id}`);
+  const fetchMeeting = jenericFetch;
+  //עוד לא בניתי בשרת meeting וגם לא בBD, אני מנסה לעשות את זה בצורה הגנרית
+  // fetchMeeting<Partial<Meeting>, Meeting>(
+  //   {
+  //     url: `meeting/create_user${
+  //       add_relations ? `?add_relations=${user_id}` : ""
+  //     }`,
+  //     method: "POST",
+  //     body: body,
+  //   },
+  //   handleSuccess,
+  //   handleError
+  // );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data: MeetingsForTable[] = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-      for (let i = 0; i < data.length; i++) {
-        data[i].id = data[i].meeting_id;
-        data[i].user_name = `${data[i].meeting_customer} ${data[i].user_name}`;
-      }
-      setMeetings(data);
-      console.log("data :", data);
-    } catch (error) {
-      console.error("Failed to fetch meeting:", error);
-    }
-  };
+  // const fetchMeeting = async () => {
+  //   try {
+  //     const response = await fetch(`${API_URI}meetings/${user_id}`);
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const data: MeetingsForTable[] = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+  //     for (let i = 0; i < data.length; i++) {
+  //       data[i].id = data[i].meeting_id;
+  //       data[i].user_name = `${data[i].meeting_customer} ${data[i].user_name}`;
+  //     }
+  //     setMeetings(data);
+  //     console.log("data :", data);
+  //   } catch (error) {
+  //     console.error("Failed to fetch meeting:", error);
+  //   }
+  // };
   useEffect(() => {
-    fetchMeeting();
+    // fetchMeeting();
   }, []);
 
   const handleDrawerOpen = () => {
@@ -128,18 +143,30 @@ const MeetingSPage: FC = () => {
       console.log("User added successfully");
       handleDrawerClose();
       reset();
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Meeting created successfully"}));
-      fetchMeeting();
+      dispatch(
+        setSnackbar({
+          snackbarOpen: true,
+          snackbarType: "success",
+          snackbarMessage: "Meeting created successfully",
+        })
+      );
+      // fetchMeeting();
     } catch (error) {
       console.error("Failed to add user:", error);
-     dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Failed to create a meeting"}));
+      dispatch(
+        setSnackbar({
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: "Failed to create a meeting",
+        })
+      );
     }
   };
   // פונקציה שתפעל בשליחת הטופס
   const onSubmit = async (data: Partial<Meeting>) => {
     console.log("data", data);
 
-     addMeeting({ ...data, meeting_agent: user_id });
+    addMeeting({ ...data, meeting_agent: user_id });
   };
 
   return (
@@ -169,7 +196,7 @@ const MeetingSPage: FC = () => {
         </Box>
         {/* <TableContainer sx={{marginLeft: 0, height: 500 */}
         {/* }} > */}
-        <Table rows={val.rows} columns={val.columns} cellType=""/>
+        <Table rows={val.rows} columns={val.columns} cellType="" />
         {/* </TableContainer> */}
       </Box>
       <Drawer
@@ -242,7 +269,7 @@ const MeetingSPage: FC = () => {
               />
             )}
           />
-           <Controller
+          <Controller
             name="meeting_title"
             control={control}
             defaultValue=""
