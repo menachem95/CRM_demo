@@ -65,13 +65,14 @@ export default function SignInSide() {
         body: JSON.stringify(loginForm),
         credentials: "include", // כדי לאפשר קבלת קוקיז בתגובה
       });
+      console.log("response:", response);
       if (!response.ok) {
         // throw new Error(response);
         // console.log("response", await response.json());
         const errorMessage = await response.text();
         setErrorMsg(errorMessage)
       }
-  
+      console.log("response:", response);
       const userData = await response.json();
       console.log("Logged in successfully:", userData);
       // ניתן לשמור את המצב של המשתמש כמחובר כאן, אם צריך

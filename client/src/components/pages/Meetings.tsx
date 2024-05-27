@@ -22,6 +22,7 @@ import { RootState } from "../../store/store";
 import { jenericFetch } from "../../functions/jenericFetch";
 import { createMeeting } from "../../functions/meetings";
 import { Meeting } from "../../typs/meetings";
+import { getUserMeeting } from "../../functions/meetings";
 
 
 // interface Meeting {
@@ -70,7 +71,7 @@ const MeetingSPage: FC = () => {
   } = useForm<Meeting>();
   const dispatch = useDispatch();
 
-  const fetchMeeting = jenericFetch;
+  // const fetchMeeting = jenericFetch;
   //עוד לא בניתי בשרת meeting וגם לא בBD, אני מנסה לעשות את זה בצורה הגנרית
   // fetchMeeting<Partial<Meeting>, Meeting>(
   //   {
@@ -104,7 +105,9 @@ const MeetingSPage: FC = () => {
   // };
   useEffect(() => {
     // fetchMeeting();
-  }, []);
+     getUserMeeting(user_id, user_role, () => {console.log("dssdsdsdsd")}, ()=>{} )
+  }, [user_id]);
+ 
 
   const handleDrawerOpen = () => {
     setIsOpen(true);

@@ -6,6 +6,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { User } from "../pages/Customers";
+import { Link } from "react-router-dom";
 
 interface PopoverProps {
 user: User
@@ -58,7 +59,8 @@ const CustomPopover: FC<PopoverProps> = ({user}) => {
           <ListItemText primary="Phone" secondary={user.user_phone} />
         </ListItem>
       </List>
-      <Button
+      <Link to={`/user_propile/${user.id}`}>
+         <Button
         variant="contained"
         sx={{
           mt: 1,
@@ -72,6 +74,8 @@ const CustomPopover: FC<PopoverProps> = ({user}) => {
       >
         More details
       </Button>
+      </Link>
+     
       <Button
         variant="outlined"
         sx={{

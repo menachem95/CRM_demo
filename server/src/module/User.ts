@@ -4,6 +4,10 @@ import Deal from "./Deal";
 import Cart from "./Cart";
 import CartItem from "./CartItem";
 import Meeting from "./Meeting";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const SECRET_KEY = process.env.SECRET_KEY as string;
 
 export interface UserAttributes {
   user_id: number;
@@ -24,6 +28,25 @@ class User
   public user_name!: string;
   public user_email!: string;
   public user_password!: string;
+
+  static async authenticate(email: string, password: string) {
+    const user = await User.findOne({ where: { user_email: email } });
+    console.log("user: ", user);
+    if (!user) {
+      throw new Error("Invalid username");
+    }
+
+    const isValid = await bcrypt.compare(password, user.user_password);
+
+    if (!isValid) {
+      throw new Error("Invalid password");
+    }
+
+    const token = jwt.sign({ user_id: user.user_id }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
+    return { user, token };
+  }
 
   static async getCurrentCartInProgres(customer_id: number) {
     const deal = await Deal.findOne({

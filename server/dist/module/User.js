@@ -8,7 +8,25 @@ const config_1 = __importDefault(require("../config/config"));
 const Deal_1 = __importDefault(require("./Deal"));
 const Cart_1 = __importDefault(require("./Cart"));
 const Meeting_1 = __importDefault(require("./Meeting"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const SECRET_KEY = process.env.SECRET_KEY;
 class User extends sequelize_1.Model {
+    static async authenticate(email, password) {
+        const user = await User.findOne({ where: { user_email: email } });
+        console.log("user: ", user);
+        if (!user) {
+            throw new Error("Invalid username");
+        }
+        const isValid = await bcrypt_1.default.compare(password, user.user_password);
+        if (!isValid) {
+            throw new Error("Invalid password");
+        }
+        const token = jsonwebtoken_1.default.sign({ user_id: user.user_id }, SECRET_KEY, {
+            expiresIn: "1h",
+        });
+        return { user, token };
+    }
     static async getCurrentCartInProgres(customer_id) {
         const deal = await Deal_1.default.findOne({
             where: { inProgress: true, customer_id },

@@ -24,8 +24,8 @@ const initialCart = {
 };
 
 const userInfo: User = {
-  user_name: "",
-  user_id: "",
+  user_name: "1",
+  user_id: "1",
   user_role: "CUSTOMER",
 };
 
@@ -65,7 +65,7 @@ export const userSlice = createSlice({
       console.log("action.payload: ", action.payload);
       localStorage.setItem("userData", JSON.stringify(action.payload));
       state.userInfo = action.payload;
-      console.log(state.userInfo);
+      console.log("state.userInfo", state.userInfo);
       // state.isLoading = false;
     },
     resetUserInfo: (state) => {

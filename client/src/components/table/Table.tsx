@@ -1,33 +1,10 @@
 import * as React from "react";
 import { FC, Suspense, useState } from "react";
-import {
-  DataGrid,
-  GridCellParams,
-  GridColDef,
-  GridRowParams,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
-import {
-  Box,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from "@mui/material";
-import { TableContainer } from "@mui/material";
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { Popover } from "@mui/material";
-
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 // import CustomPopover from "./CustomPopover";
 const CustomPopover = React.lazy(() => import("./CustomPopover"));
+
 interface Props {
   rows: {}[];
   columns: GridColDef[];
@@ -67,11 +44,7 @@ const Table: FC<Props> = ({ rows, columns, cellType }) => {
           },
         }}
         pageSizeOptions={[5, 10]}
-        // rowSelection={false}
-        // onRowClick={handleRowClick}
-        // onCellClick={(p,e) => handleRowlClick(p,e,cellType)}
         onRowClick={(p, e) => handleRowlClick(p, e, cellType)}
-        // checkboxSelection
       />
 
       {cellType === "user_name" && (
@@ -105,23 +78,3 @@ const Table: FC<Props> = ({ rows, columns, cellType }) => {
 };
 
 export default Table;
-
-{
-  /* <Paper> */
-}
-//  <Typography component="div" sx={{ p: 2 }}>
-// <Button>{cellType}</Button>
-{
-  /* Render the details here using selectedRow data */
-}
-{
-  /* {selectedRow && <div>Details about {selectedRow[cellType]}</div>} */
-}
-// {selectedRow[cellType]}
-// </Typography>
-// <Typography>
-{
-  /* {selectedRow.user_name} */
-}
-// </Typography>
-// </Paper>
