@@ -23,7 +23,6 @@ import { jenericFetch } from "../../functions/jenericFetch";
 import { createMeeting } from "../../functions/meetings";
 import { Meeting } from "../../typs/meetings";
 
-import UserAutocomplete from "../UserAutocomplete";
 
 // interface Meeting {
 //   id: string;
@@ -200,7 +199,6 @@ const MeetingSPage: FC = () => {
   return (
     <>
       <Box sx={{ padding: 3, bgcolor: "white", m: 4 }}>
-      <UserAutocomplete />
         <Box
           sx={{
             display: "flex",

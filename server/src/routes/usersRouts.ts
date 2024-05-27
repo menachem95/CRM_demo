@@ -3,8 +3,7 @@ import controlers from "../controlers";
 import User, { UserAttributes } from "../module/User";
 import bcrypt from "bcrypt";
 import { UserRelationshipAttributes } from "../module/UserRelationship";
-import { Op } from 'sequelize';
-
+import { Op } from "sequelize";
 
 const router = Router();
 
@@ -45,7 +44,6 @@ router.post("/create_user", async (req, res) => {
 //   }
 // });
 
-
 // router.get("/get_current_cart/:customer_id", async (req, res) => {
 //   try {
 //     const customer_id = req.params.customer_id;
@@ -71,7 +69,6 @@ router.get("/get_current_cart/:customer_id", async (req, res) => {
   }
 });
 
-
 router.get("/get_all_user_info/:user_id", async (req, res) => {
   try {
     const user_id = req.params.user_id;
@@ -83,19 +80,14 @@ router.get("/get_all_user_info/:user_id", async (req, res) => {
   }
 });
 
-
 router.get("/", async (req, res) => {
   try {
-    const users = await controlers.user.
-    // getAllUsers();
-    getUsers(req, res);
+    const users = await controlers.user.getAllUsers();
     console.log("users: ", users);
     res.json(users);
   } catch (error) {
     res.status(500).json({ error, message: "error" });
   }
 });
-
-
 
 export default router;

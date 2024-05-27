@@ -48,25 +48,4 @@ export const createRelationShip = async (
   }
 };
 
-export const getUsers = async (req: Request, res: Response) => {
-  const { query } = req.query as { query?: string };
-  if (!query) {
-    return res.status(400).send("Query parameter is required");
-  }
-  const whereCondition: WhereOptions = {
-    [Op.or]: [
-      { user_id: { [Op.like]: `%${query}%` } },
-      { user_name: { [Op.like]: `%${query}%` } },
-    ],
-  };
 
-  try {
-    const users: User[] = await User.findAll({
-      where: whereCondition,
-    });
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).send("Error fetching users");
-  }
-};
