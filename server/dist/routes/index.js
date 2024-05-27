@@ -11,10 +11,11 @@ const productsRouts_1 = __importDefault(require("./productsRouts"));
 const cartsRouts_1 = __importDefault(require("./cartsRouts"));
 const usersRouts_1 = __importDefault(require("./usersRouts"));
 const dealsRouts_1 = __importDefault(require("./dealsRouts"));
+const meetingsRouts_1 = __importDefault(require("./meetingsRouts"));
 const router = (0, express_1.Router)();
 // router.use("/login", loginRouter )
 // router.use("/users", usersRouter);
-// router.use("/meetings", meetingsRouter);
+router.use("/meetings", meetingsRouts_1.default);
 router.use("/products", productsRouts_1.default);
 router.use("/carts", cartsRouts_1.default);
 router.use("/users", usersRouts_1.default);

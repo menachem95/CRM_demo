@@ -5,14 +5,15 @@ import { Router } from "express";
 import productsRouter from "./productsRouts";
 import cartsRouter from "./cartsRouts"
 import usersRouter from "./usersRouts"
- import dealsRouter from "./dealsRouts";
+import dealsRouter from "./dealsRouts";
+import meetingsRouter from "./meetingsRouts"
 
 const router = Router();
 
 
 // router.use("/login", loginRouter )
 // router.use("/users", usersRouter);
-// router.use("/meetings", meetingsRouter);
+router.use("/meetings", meetingsRouter);
 router.use("/products", productsRouter);
 router.use("/carts", cartsRouter);
 router.use("/users", usersRouter);

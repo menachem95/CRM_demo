@@ -75,9 +75,7 @@ router.get("/get_all_user_info/:user_id", async (req, res) => {
 });
 router.get("/", async (req, res) => {
     try {
-        const users = await controlers_1.default.user.
-            // getAllUsers();
-            getUsers(req, res);
+        const users = await controlers_1.default.user.getAllUsers();
         console.log("users: ", users);
         res.json(users);
     }

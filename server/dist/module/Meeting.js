@@ -40,6 +40,12 @@ Meeting.init({
     meeting_summary: {
         type: sequelize_1.DataTypes.TEXT,
     },
+    meeting_title: {
+        type: sequelize_1.DataTypes.TEXT,
+    },
+    meeting_date: {
+        type: sequelize_1.DataTypes.DATE,
+    },
 }, {
     tableName: "meetings",
     timestamps: true,

@@ -3,6 +3,8 @@ import controlers from "../controlers";
 import User, { UserAttributes } from "../module/User";
 import bcrypt from "bcrypt";
 import { UserRelationshipAttributes } from "../module/UserRelationship";
+import { Op } from 'sequelize';
+
 
 const router = Router();
 
@@ -84,12 +86,16 @@ router.get("/get_all_user_info/:user_id", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const users = await controlers.user.getAllUsers();
+    const users = await controlers.user.
+    // getAllUsers();
+    getUsers(req, res);
     console.log("users: ", users);
     res.json(users);
   } catch (error) {
     res.status(500).json({ error, message: "error" });
   }
 });
+
+
 
 export default router;

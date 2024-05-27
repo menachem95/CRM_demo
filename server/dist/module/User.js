@@ -7,6 +7,7 @@ const sequelize_1 = require("sequelize");
 const config_1 = __importDefault(require("../config/config"));
 const Deal_1 = __importDefault(require("./Deal"));
 const Cart_1 = __importDefault(require("./Cart"));
+const Meeting_1 = __importDefault(require("./Meeting"));
 class User extends sequelize_1.Model {
     static async getCurrentCartInProgres(customer_id) {
         const deal = await Deal_1.default.findOne({
@@ -29,6 +30,24 @@ class User extends sequelize_1.Model {
             console.log("items: ", items);
             return { cart_id, items };
         }
+    }
+    static async getMyMeetings(user_id, user_role) {
+        let meetings;
+        if (user_role === "AGENT") {
+            meetings = await Meeting_1.default.findAll({
+                where: {
+                    agent_id: user_id,
+                },
+            });
+        }
+        else if (user_role === "CUSTOMER") {
+            meetings = await Meeting_1.default.findAll({
+                where: {
+                    customer_id: user_id,
+                },
+            });
+        }
+        return meetings;
     }
 }
 User.init({

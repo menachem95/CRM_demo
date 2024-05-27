@@ -3,6 +3,7 @@ import sequelize from "../config/config";
 import Deal from "./Deal";
 import Cart from "./Cart";
 import CartItem from "./CartItem";
+import Meeting from "./Meeting";
 
 export interface UserAttributes {
   user_id: number;
@@ -25,28 +26,44 @@ class User
   public user_password!: string;
 
   static async getCurrentCartInProgres(customer_id: number) {
-  
-      const deal = await Deal.findOne({
-        where: { inProgress: true, customer_id },
-        // include: [
-        //   {
-        //     model: Cart, // ודא שמודל Product מיובא ומוגדר כראוי
-        //     // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
-        //   },
+    const deal = await Deal.findOne({
+      where: { inProgress: true, customer_id },
+      // include: [
+      //   {
+      //     model: Cart, // ודא שמודל Product מיובא ומוגדר כראוי
+      //     // as: 'product' // 'as' צריך להיות תואם לזה שהוגדר בהגדרת הקשר ב-Sequelize
+      //   },
 
-        // ],
+      // ],
+    });
+    console.log("deal", deal);
+    if (!deal) {
+      console.error("Deal not found for customer ID:", customer_id);
+      throw new Error("deal not found");
+    } else {
+      const cart_id = deal!.cart_id;
+      const items = await Cart.getItemsForCart(+cart_id);
+      console.log("items: ", items);
+      return { cart_id, items };
+    }
+  }
+
+  static async getMyMeetings(user_id: number, user_role: string) {
+    let meetings;
+    if (user_role === "AGENT") {
+      meetings = await Meeting.findAll({
+        where: {
+          agent_id: user_id,
+        },
       });
-      console.log("deal", deal);
-      if (!deal) {
-        console.error("Deal not found for customer ID:", customer_id);
-        throw new Error("deal not found");
-      } else {
-        const cart_id = deal!.cart_id;
-        const items = await Cart.getItemsForCart(+cart_id);
-        console.log("items: ", items);
-        return { cart_id, items };
-      }
-  
+    } else if (user_role === "CUSTOMER") {
+      meetings = await Meeting.findAll({
+        where: {
+          customer_id: user_id,
+        },
+      });
+    }
+    return meetings;
   }
 
   // ניתן להוסיף כאן מתודות מופע ומחלקה

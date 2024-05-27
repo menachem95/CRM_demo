@@ -27,4 +27,5 @@ const product = __importStar(require("./Product"));
 const cart = __importStar(require("./Cart"));
 const user = __importStar(require("./User"));
 const deal = __importStar(require("./Deal"));
-exports.default = { product, cart, user, deal };
+const meetings = __importStar(require("./Meeting"));
+exports.default = { product, cart, user, deal, meetings };

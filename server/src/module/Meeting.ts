@@ -1,13 +1,15 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../config/config";
 
-interface MeetingAttributes {
+export interface MeetingAttributes {
   meeting_id: number;
   customer_id: number;
-  meeting_summary: string;
+  meeting_summary?: string;
+  meeting_title: string;
   agent_id?: number;
   inProgress?: boolean;
   status?: boolean;
+  meeting_date: string;
 }
 
 interface MeetingCreationAttributes
@@ -20,9 +22,11 @@ class Meeting
   public meeting_id!: number;
   public customer_id!: number;
   public agent_id!: number;
-  public meeting_summary!: string;
+  public meeting_summary?: string;
+  public meeting_title!: string;
   public inProgress?: boolean;
   public status?: boolean;
+  public meeting_date!: string;
 
   // ניתן להוסיף כאן מתודות מופע ומחלקה
 }
@@ -50,6 +54,7 @@ Meeting.init(
         key: "user_id",
       },
     },
+    
     inProgress: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
@@ -60,6 +65,12 @@ Meeting.init(
     },
     meeting_summary: {
       type: DataTypes.TEXT,
+    },
+    meeting_title: {
+      type: DataTypes.TEXT,
+    },
+    meeting_date: {
+      type: DataTypes.DATE,
     },
   },
   {

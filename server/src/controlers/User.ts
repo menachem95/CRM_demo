@@ -1,7 +1,8 @@
 import { User, UserRelationship } from "../module";
 import { UserAttributes } from "../module/User";
 import { UserRelationshipAttributes } from "../module/UserRelationship";
-
+import { Request, Response } from "express";
+import { Op, WhereOptions } from "sequelize";
 
 export const getAllUsers = async () => {
   try {
@@ -27,22 +28,45 @@ export const getUser = async (user_id: string) => {
 
 export const createUser = async (user: UserAttributes) => {
   try {
-   const newUser = await User.create(user)
-   return newUser;
+    const newUser = await User.create(user);
+    return newUser;
   } catch (error) {
     console.error("error: ", error);
     return error;
   }
 };
 
-export const createRelationShip = async (newRelationShipInfo: UserRelationshipAttributes) => {
+export const createRelationShip = async (
+  newRelationShipInfo: UserRelationshipAttributes
+) => {
   try {
-   const newRelationShip = await UserRelationship.create(newRelationShipInfo)
-   return newRelationShip;
+    const newRelationShip = await UserRelationship.create(newRelationShipInfo);
+    return newRelationShip;
   } catch (error) {
     console.error("error: ", error);
     return error;
   }
 };
 
+export const getUsers = async (req: Request, res: Response) => {
+  const { query } = req.query as { query?: string };
+  if (!query) {
+    return res.status(400).send("Query parameter is required");
+  }
+  const whereCondition: WhereOptions = {
+    [Op.or]: [
+      { user_id: { [Op.like]: `%${query}%` } },
+      { user_name: { [Op.like]: `%${query}%` } },
+    ],
+  };
 
+  try {
+    const users: User[] = await User.findAll({
+      where: whereCondition,
+    });
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send("Error fetching users");
+  }
+};

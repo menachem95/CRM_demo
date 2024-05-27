@@ -16,20 +16,24 @@ import { useDispatch, useSelector } from "react-redux";
 import Table from "../table/Table";
 import JenericPage from "./JenericPage";
 import { Close } from "@mui/icons-material";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { setSnackbar } from "../../store/snackbarSlice";
 import { RootState } from "../../store/store";
-import { log } from "console";
 import { jenericFetch } from "../../functions/jenericFetch";
+import { createMeeting } from "../../functions/meetings";
+import { Meeting } from "../../typs/meetings";
 
-interface Meeting {
-  id: string;
-  meeting_id: string;
-  meeting_agent: string;
-  meeting_customer: string;
-  meeting_date: string;
-  meeting_title: string;
-}
+import UserAutocomplete from "../UserAutocomplete";
+
+// interface Meeting {
+//   id: string;
+//   meeting_id: string;
+//   agent_id: string;
+//   customer_id: string;
+//   meeting_date: string;
+//   meeting_title: string;
+//   meeting_summary: string;
+// }
 
 interface MeetingsForTable extends Meeting {
   user_name: string;
@@ -64,7 +68,7 @@ const MeetingSPage: FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Partial<Meeting>>();
+  } = useForm<Meeting>();
   const dispatch = useDispatch();
 
   const fetchMeeting = jenericFetch;
@@ -118,60 +122,85 @@ const MeetingSPage: FC = () => {
     buttonTitle: "Add meeting",
   };
 
-  const addMeeting = async (data: Partial<Meeting>) => {
-    // const {add_relations} = data
-    console.log("data: ", data);
-    // delete data.add_relations
-    // console.log("data: ", data);
+  // const addMeeting = async (data: Partial<Meeting>) => {
+  //   // const {add_relations} = data
+  //   console.log("data: ", data);
+  //   // delete data.add_relations
+  //   // console.log("data: ", data);
 
-    // console.log("add_relations: ", add_relations)
-    // console.log(`${API_URI}users/add_user${add_relations ? `?${userId}` : ""}`);
+  //   // console.log("add_relations: ", add_relations)
+  //   // console.log(`${API_URI}users/add_user${add_relations ? `?${userId}` : ""}`);
 
-    try {
-      const response = await fetch(`${API_URI}meetings/add_meeting`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
-      console.log(response1);
-      console.log("User added successfully");
-      handleDrawerClose();
-      reset();
-      dispatch(
-        setSnackbar({
-          snackbarOpen: true,
-          snackbarType: "success",
-          snackbarMessage: "Meeting created successfully",
-        })
-      );
-      // fetchMeeting();
-    } catch (error) {
-      console.error("Failed to add user:", error);
-      dispatch(
-        setSnackbar({
-          snackbarOpen: true,
-          snackbarType: "error",
-          snackbarMessage: "Failed to create a meeting",
-        })
-      );
-    }
-  };
+  //   try {
+  //     const response = await fetch(`${API_URI}meetings/add_meeting`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json", // קביעת סוג התוכן ל-JSON
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const response1 = await response.json(); // קביעת טיפוס עבור התגובה שהתקבלה
+  //     console.log(response1);
+  //     console.log("User added successfully");
+  //     handleDrawerClose();
+  //     reset();
+  //     dispatch(
+  //       setSnackbar({
+  //         snackbarOpen: true,
+  //         snackbarType: "success",
+  //         snackbarMessage: "Meeting created successfully",
+  //       })
+  //     );
+  //     // fetchMeeting();
+  //   } catch (error) {
+  //     console.error("Failed to add user:", error);
+  //     dispatch(
+  //       setSnackbar({
+  //         snackbarOpen: true,
+  //         snackbarType: "error",
+  //         snackbarMessage: "Failed to create a meeting",
+  //       })
+  //     );
+  //   }
+  // };
   // פונקציה שתפעל בשליחת הטופס
-  const onSubmit = async (data: Partial<Meeting>) => {
+
+  const handleSuccess = () => {
+    // dispatch(removeCart());
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "success",
+        snackbarMessage: "Cart removed successfully",
+      })
+    );
+    handleDrawerClose();
+  };
+
+  const handleError = () => {
+    dispatch(
+      setSnackbar({
+        snackbarOpen: true,
+        snackbarType: "error",
+        snackbarMessage: "Failed to remove cart",
+      })
+    );
+    handleDrawerClose();
+  };
+
+  const onSubmit: SubmitHandler<Meeting> = async (data: Meeting) => {
     console.log("data", data);
 
-    addMeeting({ ...data, meeting_agent: user_id });
+    createMeeting({ ...data, agent_id: 3, customer_id: +data.customer_id }, handleSuccess, handleError);
   };
 
   return (
     <>
       <Box sx={{ padding: 3, bgcolor: "white", m: 4 }}>
+      <UserAutocomplete />
         <Box
           sx={{
             display: "flex",
@@ -227,7 +256,7 @@ const MeetingSPage: FC = () => {
             יצירת פגישה{" "}
           </Typography>
           <Controller
-            name="meeting_customer"
+            name="customer_id"
             control={control}
             defaultValue=""
             rules={{ required: "שדה זה הוא שדה חובה" }}
@@ -238,13 +267,14 @@ const MeetingSPage: FC = () => {
                 variant="filled"
                 fullWidth
                 margin="normal"
-                error={!!errors.meeting_customer}
+                error={!!errors.customer_id}
                 helperText={
-                  errors.meeting_customer ? errors.meeting_customer.message : ""
+                  errors.customer_id ? errors.customer_id.message : ""
                 }
               />
             )}
           />
+         
           <Controller
             name="meeting_date"
             control={control}
@@ -285,6 +315,30 @@ const MeetingSPage: FC = () => {
               <TextField
                 {...field}
                 variant="filled"
+                label="כותרת"
+                error={!!errors.meeting_title}
+                helperText={
+                  errors.meeting_title ? errors.meeting_title.message : ""
+                }
+              />
+            )}
+          />
+          <Controller
+            name="meeting_summary"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "שדה זה הוא שדה חובה",
+
+              // pattern: {
+              //   value: /^[0-9]{10}$/,
+              //   message: "מספר הטלפון צריך להכיל ספרות בלבד",
+              // },
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="filled"
                 label="נושא"
                 error={!!errors.meeting_title}
                 helperText={
@@ -293,6 +347,7 @@ const MeetingSPage: FC = () => {
               />
             )}
           />
+
           {/* <Controller
             name="user_email"
             control={control}

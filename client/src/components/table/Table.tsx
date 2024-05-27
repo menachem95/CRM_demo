@@ -86,7 +86,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
 
-  const handleCellClick = (params: GridRowParams, event: React.MouseEvent<HTMLElement>, cellType: string) => {
+  const handleRowlClick = (params: GridRowParams, event: React.MouseEvent<HTMLElement>, cellType: string) => {
     console.log("params: ", params);
     // if(params.id !== cellType) return;
     setSelectedRow(params.row);
@@ -114,8 +114,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
           pageSizeOptions={[5, 10]}
           // rowSelection={false}
           // onRowClick={handleRowClick}
-          // onCellClick={(p,e) => handleCellClick(p,e,cellType)}
-          onRowClick={(p,e) => handleCellClick(p,e,cellType)}
+          // onCellClick={(p,e) => handleRowlClick(p,e,cellType)}
+          onRowClick={(p,e) => handleRowlClick(p,e,cellType)}
           // checkboxSelection
           
         />
@@ -171,25 +171,26 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
       <Button variant="contained"  sx={{ m: 1 }}>Send Message</Button>
     </Popover> */}
 
-    <Popover
-      open={open}
-      anchorEl={anchorEl}
-      onClose={handleClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-      sx={{
-        '.MuiPopover-paper': {
-          p: 2,
-          maxWidth: "100%",
-        },
-      }}
-    >
+<Popover
+  id={id}
+  open={open}
+  anchorEl={anchorEl}
+  onClose={handleClose}
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'left',
+  }}
+  transformOrigin={{
+    vertical: 'top',
+    horizontal: 'left',
+  }}
+  sx={{
+    '.MuiPopover-paper': {
+      p: 2,
+      maxWidth: "100%",
+    },
+  }}
+>
     {/*   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <AccountCircleIcon color="action" sx={{ mr: 1 }} />
         <Box>
