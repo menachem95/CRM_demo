@@ -22,7 +22,7 @@ import { RootState } from "../../store/store";
 
 import { jenericFetch as addUser } from "../../functions/jenericFetch";
 
-interface User {
+export interface User {
   id: string;
   user_id: string;
   user_name: string;

@@ -5,12 +5,15 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { User } from "../pages/Customers";
 
 interface PopoverProps {
-
+user: User
 }
 
-const CustomPopover: FC<PopoverProps> = () => {
+
+
+const CustomPopover: FC<PopoverProps> = ({user}) => {
   return (
     // <Popover
     //   open={open}
@@ -35,9 +38,9 @@ const CustomPopover: FC<PopoverProps> = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <AccountCircleIcon color="action" sx={{ mr: 1 }} />
         <Box>
-          <Typography variant="subtitle1">Yoni Levy</Typography>
+          <Typography variant="subtitle1">{user.user_name}</Typography>
           <Typography variant="caption" display="block" gutterBottom>
-            customer
+            customer 
           </Typography>
         </Box>
       </Box>
@@ -46,13 +49,13 @@ const CustomPopover: FC<PopoverProps> = () => {
           <ListItemIcon>
             <EmailIcon />
           </ListItemIcon>
-          <ListItemText primary="Email" secondary="test@test.com" />
+          <ListItemText primary="Email" secondary={user.user_email} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <PhoneIcon />
           </ListItemIcon>
-          <ListItemText primary="Phone" secondary="058-9662754" />
+          <ListItemText primary="Phone" secondary={user.user_phone} />
         </ListItem>
       </List>
       <Button
