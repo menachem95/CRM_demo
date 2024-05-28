@@ -23,11 +23,11 @@ export const createMeeting = async (
 export const getUserMeeting = async (
   user_id: string,
   user_role: string,
-  handleSuccess: (meeting: Meeting) => void,
+  handleSuccess: (meeting: Meeting[]) => void,
   handleError: (error: Error) => void
 ) => {
     
-  await jenericFetch<undefined, Meeting>(
+  await jenericFetch<undefined, Meeting[]>(
     {
       url: `meetings/get_my_meeting/${user_id}/${user_role}`,
       method: "GET",

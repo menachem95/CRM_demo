@@ -24,7 +24,6 @@ import { createMeeting } from "../../functions/meetings";
 import { Meeting } from "../../typs/meetings";
 import { getUserMeeting } from "../../functions/meetings";
 
-
 // interface Meeting {
 //   id: string;
 //   meeting_id: string;
@@ -105,9 +104,17 @@ const MeetingSPage: FC = () => {
   // };
   useEffect(() => {
     // fetchMeeting();
-     getUserMeeting(user_id, user_role, () => {console.log("dssdsdsdsd")}, ()=>{} )
-  }, [user_id]);
- 
+    getUserMeeting(
+      user_id,
+      user_role,
+      (meetings) => {
+        setMeetings(meetings.map(meeting => {
+          return {...meeting, user_name: "df", id: meeting.meeting_id}}));
+      },
+      () => {}
+    );
+  }, []);
+  
 
   const handleDrawerOpen = () => {
     setIsOpen(true);
@@ -196,7 +203,11 @@ const MeetingSPage: FC = () => {
   const onSubmit: SubmitHandler<Meeting> = async (data: Meeting) => {
     console.log("data", data);
 
-    createMeeting({ ...data, agent_id: 3, customer_id: +data.customer_id }, handleSuccess, handleError);
+    createMeeting(
+      { ...data, agent_id: 3, customer_id: +data.customer_id },
+      handleSuccess,
+      handleError
+    );
   };
 
   return (
@@ -275,7 +286,7 @@ const MeetingSPage: FC = () => {
               />
             )}
           />
-         
+
           <Controller
             name="meeting_date"
             control={control}

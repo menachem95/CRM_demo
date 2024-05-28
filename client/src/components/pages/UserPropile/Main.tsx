@@ -30,6 +30,7 @@ import {
 } from "../../../typs/products_and_carts";
 import { getUserCurrentCart } from "../../../functions/userInfo";
 import UserCart from "./UserCart";
+import UserMeetings from "./UserMeetings";
 import Empty from "./Empty";
 import CustomButton from "../../UI/CustomButton";
 
@@ -207,6 +208,7 @@ const Main: FC = () => {
       </Paper>
 
       {user && <UserCart user={user} />}
+      {user && <UserMeetings user={user} />}
 
       {/* <Item
         sx={{
